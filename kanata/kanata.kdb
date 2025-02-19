@@ -5,7 +5,7 @@
 (defsrc)
 (deflayermap default
     caps @cap
-    prtsc lrld
+    prtsc (tap-dance 200 (lrld lrld-next))
     lctrl (layer-while-held mouse)
     ins (tap-dance 200 (caps (layer-switch none)))
 )

@@ -1,0 +1,128 @@
+(defcfg
+    process-unmapped-keys yes
+    block-unmapped-keys yes
+    concurrent-tap-hold yes
+)
+
+(deflocalkeys-linux
+    ñ 39
+    ´ 40
+    ` 26
+    ç 43
+    - 53
+    + 27
+    ' 12
+    º 41
+    ¡ 13
+)
+;; 
+(defsrc
+    tab   q  w  e  r  t      y  u  i  o  p  `       prtsc
+    caps  a  s  d  f  g      h  j  k  l  ñ  ´
+    lsft  z  x  c  v  b      n  m  ,  .  -  rsft
+             lmet  lalt  spc  ralt  <
+)
+(deflayer main
+    tab   q  w  e  r  t      y  u  i  o  p  bspc    (tap-dance 200 (lrld lrld-next))
+    @ctl  a  s  d  f  g      h  j  k  l @'  @ret
+    lsft  z  x  c  v  b      n  m  ,  .  -  rsft
+              alt  @sym  spc  @sym  alt
+)
+;;             @acl  @sym  spc  @sym  @acr
+(deflayer symbol
+      @\ @! @@ @# @$ @%     @&  7  8  9 @?  del     _
+      @` @< @[ @{ @⟮ @=     @/  4  5  6  +  _
+   @sSym @> @^ @· @~ @|     @*  1  2  3  -  @sSym
+                _    _    _    0    .
+)
+(deflayer symbol-shift
+       _  ¡  _ @€  _  _      _  _  _  _ @¿  _       _
+       _  _ @] @} @⟯  _      ◀  ▼  ▲  ▶  _  _
+       _  _  _  _  _  _      _  _  _  _  _  _
+                _    _    _    _    _
+)
+(defchordsv2
+    (lmet d) ` 90 first-release ()
+    (lmet f) ´ 90 first-release ()
+    (lmet s) S-´ 90 first-release ()
+    (lmet n) ñ 90 first-release ()
+    (lmet c) ç 90 first-release ()
+
+    (< j) ` 90 first-release ()
+    (< k) ´ 90 first-release ()
+    (< l) S-´ 90 first-release ()
+    (< n) ñ 90 first-release ()
+    (< c) ç 90 first-release ()
+)
+(deflayer accent-left
+       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _
+       _ @à  _  _  _  _      _  _  _  _  _  _
+       _  _  _  ç  _  _      ñ  _  _  _  _  _
+                _    _    _    _    _
+)
+(deflayer accent-right
+       _  _  _ @é  _  _      _ @ú @í @ó  _  _       _
+       _ @á  _  _  _  _      _  _  _  _  _  _
+       _  _  _  ç  _  _      ñ  _  _  _  _  _
+                _    _    _    _    _
+)
+(deflayer accent-dieresis
+       _  _  _  _  _  _      _ @ü @ï  _  _  _       _
+       _  _  _  _  _  _      _  _  _  _  _  _
+       _  _  _  _  _  _      _  _  _  _  _  _
+                _    _    _    _    _
+)
+
+(defalias
+    ctl (tap-hold-press 100 250 esc lctl)
+    ret (tap-hold-press 100 250 ret rctl)
+    spc (tap-hold-press 0 250 spc (layer-while-held symbol))
+    sym (layer-while-held symbol)
+    sSym (layer-while-held symbol-shift)
+    acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) lalt)
+    acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-right)) lalt)
+
+    '  (fork ' S-2 (sft))
+    !  S-1
+    @  AG-2
+    #  AG-3
+    %  S-5
+    $  S-4
+    ?  S-'
+    ¿  S-¡
+    *  S-+
+    ·  S-3
+    ^  (macro S-` spc)
+    =  S-0
+    ~  AG-4
+    &  S-6
+    /  S-7
+    \  AG-º
+    |  AG-1
+    `  (macro ` spc)
+    €  AG-e
+
+    ⟮  S-8
+    ⟯  S-9
+    [  AG-`
+    ]  AG-+
+    <  <
+    >  S-<
+    {  AG-´
+    }  AG-ç
+
+    á  (macro ´ a)
+    à  (macro ` a)
+    é  (macro ´ e)
+    è  (macro ` e)
+    í  (macro ´ i)
+    ì  (macro ` i)
+    ó  (macro ´ o)
+    ò  (macro ` o)
+    ú  (macro ´ u)
+    ù  (macro ` u)
+
+    ü  (macro S-´ u)
+    ï  (macro S-´ i)
+)
+

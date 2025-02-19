@@ -4,7 +4,7 @@ Documentation=https://github.com/jtroo/kanata
 
 [Service]
 Type=simple
-ExecStart=/home/lia/.cargo/bin/kanata --cfg /home/lia/.config/kanata/kanata.kdb
+ExecStart=/home/lia/.cargo/bin/kanata -c /home/lia/.config/kanata/fancy.kdb -c /home/lia/.config/kanata/kanata.kdb
 Restart=never
 
 [Install]
