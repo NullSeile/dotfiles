@@ -159,6 +159,7 @@
     python3Full
     nodejs
     kanata
+    gh
 
     gnome-disk-utility
     gnome-system-monitor
