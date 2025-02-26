@@ -5,11 +5,12 @@
 
 { config, pkgs, ... }:
 
-{
-  imports =
-    [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-    ];
+let
+  unstable = import <nixos-unstable> { config.allowUnfree = true; };
+in {
+  imports = [ # Include the results of the hardware scan.
+    /etc/nixos/hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.grub.enable = true;
@@ -48,12 +49,11 @@
     LC_TIME = "es_ES.UTF-8";
   };
 
-  services.displayManager.defaultSession = "none+i3";
-
   # services.xserver.displayManager.gdm.enable = true;
   # services.xserver.desktopManager.gnome.enable = true;
 
   # Enable the X11 windowing system.
+  services.displayManager.defaultSession = "none+i3";
   services.xserver = {
     enable = true;
     desktopManager = {
@@ -62,15 +62,21 @@
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
-        dmenu
-        i3status
-        i3lock
-        i3blocks
       ];
     };
   };
   services.xserver.windowManager.i3.package = pkgs.i3-gaps;
   programs.dconf.enable = true;
+
+  services.kanata = {
+        enable = true;
+        package = unstable.kanata;
+        keyboards = {
+            internalKeyboard = {
+                configFile = "/etc/nixos/kanata.kbd";
+            };
+        };
+    };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -131,8 +137,10 @@
     enable = true;
     defaultEditor = true;
   };
-
   programs.fish.enable = true;
+  programs.git = {
+    enable = true;
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -145,7 +153,6 @@
     neofetch
     rofi
     htop
-    git
     lazygit
     gcc
     lxappearance
@@ -158,8 +165,11 @@
     bottom
     python3Full
     nodejs
-    kanata
+    yarn
+    unstable.kanata
     gh
+    cmake
+    xclip
 
     gnome-disk-utility
     gnome-system-monitor
@@ -167,6 +177,7 @@
     simple-scan
     baobab
   ];
+
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images
 
@@ -249,3 +260,5 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 }
+
+# vim:set shiftwidth=2:set tabstop=2:

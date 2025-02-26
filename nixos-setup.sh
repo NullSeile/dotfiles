@@ -17,7 +17,7 @@ function sudo_create_symlink() {
         echo "Removing $2"
         sudo rm -ri "$2"
     fi
-    sudo ln -s "$dir/$1" "$2"
+    sudo ln "$dir/$1" "$2"
 }
 
 
@@ -26,7 +26,8 @@ sudo_create_symlink nixos/configuration.nix /etc/nixos/configuration.nix
 create_symlink i3 ~/.config/i3
 create_symlink nvim ~/.config/nvim
 
-create_symlink kanata ~/.config/kanata
+# create_symlink kanata ~/.config/kanata
+sudo_create_symlink kanata/fancy.kbd /etc/nixos/kanata.kbd
 # create_symlink kanata/kanata.service ~/.config/systemd/user/kanata.service
 # systemctl --user enable kanata
 
