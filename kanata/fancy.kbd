@@ -15,7 +15,7 @@
     º 41
     ¡ 13
 )
-;; 
+;;
 (defsrc
     tab   q  w  e  r  t      y  u  i  o  p  `       prtsc
     caps  a  s  d  f  g      h  j  k  l  ñ  ´
@@ -54,24 +54,24 @@
     (< n) ñ 90 first-release ()
     (< c) ç 90 first-release ()
 )
-(deflayer accent-left
-       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _
-       _ @à  _  _  _  _      _  _  _  _  _  _
-       _  _  _  ç  _  _      ñ  _  _  _  _  _
-                _    _    _    _    _
-)
-(deflayer accent-right
-       _  _  _ @é  _  _      _ @ú @í @ó  _  _       _
-       _ @á  _  _  _  _      _  _  _  _  _  _
-       _  _  _  ç  _  _      ñ  _  _  _  _  _
-                _    _    _    _    _
-)
-(deflayer accent-dieresis
-       _  _  _  _  _  _      _ @ü @ï  _  _  _       _
-       _  _  _  _  _  _      _  _  _  _  _  _
-       _  _  _  _  _  _      _  _  _  _  _  _
-                _    _    _    _    _
-)
+;;(deflayer accent-left
+;;       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _
+;;       _ @à  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
+;;                _    _    _    _    _
+;;)
+;;(deflayer accent-right
+;;       _  _  _ @é  _  _      _ @ú @í @ó  _  _       _
+;;       _ @á  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
+;;                _    _    _    _    _
+;;)
+;;(deflayer accent-dieresis
+;;       _  _  _  _  _  _      _ @ü @ï  _  _  _       _
+;;       _  _  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  _  _  _      _  _  _  _  _  _
+;;                _    _    _    _    _
+;;)
 
 (defalias
     ctl (tap-hold-press 100 250 esc lctl)
@@ -79,8 +79,8 @@
     spc (tap-hold-press 0 250 spc (layer-while-held symbol))
     sym (layer-while-held symbol)
     sSym (layer-while-held symbol-shift)
-    acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) lalt)
-    acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-right)) lalt)
+    ;;acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) lalt)
+    ;;acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-right)) lalt)
 
     '  (fork ' S-2 (sft))
     !  S-1
