@@ -16,7 +16,7 @@ set $aqua #6A9589
 set $gray #a89984
 set $darkgray #1d2021
 
-client.focused          $blue $blue $darkgray $purple #F0C674
+client.focused          $blue $blue $darkgray #F0C674 #F0C674
 client.focused_inactive $darkgray $darkgray $yellow $purple $gray
 client.unfocused        $darkgray $darkgray $yellow $purple $gray
 client.urgent           $red $red $white $red $red
@@ -59,6 +59,7 @@ exec --no-startup-id dex --autostart --environment i3
 
 # Start Rofication for notifications
 exec --no-startup-id dunst
+exec --no-startup-id blueman-applet
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod

@@ -17,42 +17,57 @@
 )
 ;;
 (defsrc
-    tab   q  w  e  r  t      y  u  i  o  p  `       prtsc
-    caps  a  s  d  f  g      h  j  k  l  ñ  ´
-    lsft  z  x  c  v  b      n  m  ,  .  -  rsft
-             lmet  lalt  spc  ralt  <
+      f1 f2 f3 f4 f5 f6     f7 f8 f9 f10 f11 f12
+
+       º  1  2  3  4  5      7  8  9  0  '  ¡       prtsc
+     tab  q  w  e  r  t      u  i  o  p  `  +
+    caps  a  s  d  f  g      j  k  l  ñ  ´  ret
+                   x c v    n m ,
 )
+;;(defsrc
+;;    tab   q  w  e  r  t      y  u  i  o  p  `       prtsc
+;;    caps  a  s  d  f  g      h  j  k  l  ñ  ´
+;;    lsft  z  x  c  v  b      n  m  ,  .  -  rsft
+;;             lmet  lalt  spc  ralt  <
+;;)
 (deflayer main
+       _  _  _  _  _  _      _  _  _  _  _  _
+
     tab   q  w  e  r  t      y  u  i  o  p  bspc    (tap-dance 200 (lrld lrld-next))
     @ctl  a  s  d  f  g      h  j  k  l @'  @ret
     lsft  z  x  c  v  b      n  m  ,  .  -  rsft
-              alt  @sym  spc  @sym  alt
+            alt spc @sym    @sym spc alt
+              ;;alt  @sym  spc  @sym  alt
 )
 ;;             @acl  @sym  spc  @sym  @acr
 (deflayer symbol
-      @\ @! @@ @# @$ @%     @&  7  8  9 @?  del     _
+       _  _  _  _  _  _      _  _  _  _  _  _
+
+      @\ @! @@ @# @$ @%     @&  7  8  9 @?  _       _
       @` @< @[ @{ @⟮ @=     @/  4  5  6  +  _
    @sSym @> @^ @· @~ @|     @*  1  2  3  -  @sSym
-                _    _    _    0    .
+                   _ _ _   _ 0 .
 )
 (deflayer symbol-shift
-       _  ¡  _ @€  _  _      _  _  _  _ @¿  _       _
-       _  _ @] @} @⟯  _      ◀  ▼  ▲  ▶  _  _
        _  _  _  _  _  _      _  _  _  _  _  _
-                _    _    _    _    _
+
+       _  ¡  _ @€  _  _      _  _  _  _ @¿  del     _
+       _  _ @] @} @⟯  _      ◀  ▼  ▲  ▶  _  _
+       _  _  _  _  _  _      🔅 🔆 🔊 🔉 _  _
+                   _ _ _    _ _ _
 )
 (defchordsv2
-    (lmet d) ` 90 first-release ()
-    (lmet f) ´ 90 first-release ()
-    (lmet s) S-´ 90 first-release ()
-    (lmet n) ñ 90 first-release ()
-    (lmet c) ç 90 first-release ()
+    (x e) ` 90 first-release ()
+    (x r) ´ 90 first-release ()
+    (x w) S-´ 90 first-release ()
+    (x j) ñ 90 first-release ()
+    (x d) ç 90 first-release ()
 
-    (< j) ` 90 first-release ()
-    (< k) ´ 90 first-release ()
-    (< l) S-´ 90 first-release ()
-    (< n) ñ 90 first-release ()
-    (< c) ç 90 first-release ()
+    (, j) ` 90 first-release ()
+    (, k) ´ 90 first-release ()
+    (, l) S-´ 90 first-release ()
+    (, n) ñ 90 first-release ()
+    (, c) ç 90 first-release ()
 )
 ;;(deflayer accent-left
 ;;       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _

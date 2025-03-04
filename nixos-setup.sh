@@ -12,7 +12,7 @@ function create_symlink() {
 }
 
 
-function sudo_create_symlink() {
+function sudo_create_hardlink() {
     if [ -e "$2" ]; then
         echo "Removing $2"
         sudo rm -ri "$2"
@@ -20,16 +20,16 @@ function sudo_create_symlink() {
     sudo ln "$dir/$1" "$2"
 }
 
+sudo nix-channel --add https://nixos.org/channels/nixos-unstable nixos-unstable
+sudo nix-channel --update
 
-sudo_create_symlink nixos/configuration.nix /etc/nixos/configuration.nix
+sudo_create_hardlink nixos/configuration.nix /etc/nixos/configuration.nix
 
 create_symlink i3 ~/.config/i3
 create_symlink nvim ~/.config/nvim
 
-# create_symlink kanata ~/.config/kanata
-sudo_create_symlink kanata/fancy.kbd /etc/nixos/kanata.kbd
-# create_symlink kanata/kanata.service ~/.config/systemd/user/kanata.service
-# systemctl --user enable kanata
+
+sudo_create_hardlink kanata/fancy.kbd /etc/nixos/kanata.kbd
 
 create_symlink wezterm ~/.config/wezterm
 create_symlink polybar ~/.config/polybar

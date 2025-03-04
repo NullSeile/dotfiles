@@ -13,9 +13,12 @@ in {
   ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/vda";
+  # boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFilesystems = [ "ntfs" ];
 
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -30,6 +33,11 @@ in {
     enable = true;
     indicator = true;
   };
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "lia" ];
+virtualisation.virtualbox.guest.enable = true;
+virtualisation.virtualbox.guest.dragAndDrop = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Madrid";
@@ -84,6 +92,29 @@ in {
     variant = "";
   };
 
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = ["nvidia"];
+
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc.lib
+      zlib
+      libgcc
+    ];
+  };
+  programs.direnv.enable = true;
+
+  hardware.nvidia = {
+    open = true;
+    prime = {
+      sync.enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+  };
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -106,9 +137,13 @@ in {
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
+  services.libinput = {
+    enable = true;
+    touchpad.naturalScrolling = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.lia = {
@@ -117,9 +152,16 @@ in {
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       discord
+      vencord
       google-chrome
       vscode
       obsidian
+      keepassxc
+      unstable.nchat
+      spotify-player
+      spotify
+      spicetify-cli
+      p3x-onenote
     ];
   };
 
@@ -141,6 +183,8 @@ in {
   programs.git = {
     enable = true;
   };
+
+  services.gnome.gnome-keyring.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -170,6 +214,16 @@ in {
     gh
     cmake
     xclip
+    lshw
+    brightnessctl
+    ripgrep
+    # xorg.xbacklight
+    maple-mono-NF
+    # gnome-keyring
+    nix-index
+    gnumake
+    pkg-config
+    jq
 
     gnome-disk-utility
     gnome-system-monitor
