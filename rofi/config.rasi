@@ -1,0 +1,8 @@
+
+@theme "/usr/share/rofi/themes/gruvbox-dark.rasi"
+
+configuration {
+    modes: "window,drun,run,ssh,combi";
+    font: "JetBrains Mono 12";
+}
+

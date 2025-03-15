@@ -1,7 +1,7 @@
 (defcfg
     process-unmapped-keys yes
     block-unmapped-keys yes
-    concurrent-tap-hold yes
+    ;;concurrent-tap-hold yes
 )
 
 (deflocalkeys-linux
@@ -34,9 +34,9 @@
        _  _  _  _  _  _      _  _  _  _  _  _
 
     tab   q  w  e  r  t      y  u  i  o  p  bspc    (tap-dance 200 (lrld lrld-next))
-    @ctl  a  s  d  f  g      h  j  k  l @'  @ret
+    @ctl  a  s  d  f  g      h  j  k  l @'  ret
     lsft  z  x  c  v  b      n  m  ,  .  -  rsft
-            alt spc @sym    @sym spc alt
+           @acl spc @sym    @sym spc @acr
               ;;alt  @sym  spc  @sym  alt
 )
 ;;             @acl  @sym  spc  @sym  @acr
@@ -56,37 +56,22 @@
        _  _  _  _  _  _      🔅 🔆 🔊 🔉 _  _
                    _ _ _    _ _ _
 )
-(defchordsv2
-    (x e) ` 90 first-release ()
-    (x r) ´ 90 first-release ()
-    (x w) S-´ 90 first-release ()
-    (x j) ñ 90 first-release ()
-    (x d) ç 90 first-release ()
+(deflayer accents-right
+       _  _  _  _  _  _      _  _  _  _  _  _
 
-    (, j) ` 90 first-release ()
-    (, k) ´ 90 first-release ()
-    (, l) S-´ 90 first-release ()
-    (, n) ñ 90 first-release ()
-    (, c) ç 90 first-release ()
+       _  _  _  _  _  _      _  _  _  _  _  _       _
+       _  _  _  _  _  _      _ @◌̀ @◌́ @◌̈  _  _
+       _  _  _ @ç  _  _      _  _  _  _  _  _
+                   _ _ _    _ _ _
 )
-;;(deflayer accent-left
-;;       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _
-;;       _ @à  _  _  _  _      _  _  _  _  _  _
-;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
-;;                _    _    _    _    _
-;;)
-;;(deflayer accent-right
-;;       _  _  _ @é  _  _      _ @ú @í @ó  _  _       _
-;;       _ @á  _  _  _  _      _  _  _  _  _  _
-;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
-;;                _    _    _    _    _
-;;)
-;;(deflayer accent-dieresis
-;;       _  _  _  _  _  _      _ @ü @ï  _  _  _       _
-;;       _  _  _  _  _  _      _  _  _  _  _  _
-;;       _  _  _  _  _  _      _  _  _  _  _  _
-;;                _    _    _    _    _
-;;)
+(deflayer accents-left
+       _  _  _  _  _  _      _  _  _  _  _  _
+
+       _  _  _  _  _  _      _  _  _  _  _  _       _
+       _  _ @◌̈ @◌̀ @◌́  _      _  _  _  _  _  _
+       _  _  _  _  _  _     @ñ  _  _  _  _  _
+                   _ _ _    _ _ _
+)
 
 (defalias
     ctl (tap-hold-press 100 250 esc lctl)
@@ -94,8 +79,14 @@
     spc (tap-hold-press 0 250 spc (layer-while-held symbol))
     sym (layer-while-held symbol)
     sSym (layer-while-held symbol-shift)
-    ;;acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) lalt)
-    ;;acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-right)) lalt)
+    acl (multi (layer-while-held accents-left) alt)
+    acr (multi (layer-while-held accents-right) alt)
+    ;;acl (layer-while-held accents-left)
+    ;;acr (layer-while-held accents-right)
+    ;;acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) alt)
+    ;;acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-left)) alt)
+    ;;acl alt
+    ;;acr alt
 
     '  (fork ' S-2 (sft))
     !  S-1
@@ -126,18 +117,55 @@
     {  AG-´
     }  AG-ç
 
-    á  (macro ´ a)
-    à  (macro ` a)
-    é  (macro ´ e)
-    è  (macro ` e)
-    í  (macro ´ i)
-    ì  (macro ` i)
-    ó  (macro ´ o)
-    ò  (macro ` o)
-    ú  (macro ´ u)
-    ù  (macro ` u)
+    ◌̀ (multi ` (release-key alt))
+    ◌́ (multi ´ (release-key alt))
+    ◌̈ (multi S-´ (release-key alt))
+    ç (unmod (alt) ç)
+    ñ (unmod (alt) ñ)
 
-    ü  (macro S-´ u)
-    ï  (macro S-´ i)
+    ;;á  (macro ´ a)
+    ;;à  (macro ` a)
+    ;;é  (macro ´ e)
+    ;;è  (macro ` e)
+    ;;í  (macro ´ i)
+    ;;ì  (macro ` i)
+    ;;ó  (macro ´ o)
+    ;;ò  (macro ` o)
+    ;;ú  (macro ´ u)
+    ;;ù  (macro ` u)
+
+    ;;ü  (macro S-´ u)
+    ;;ï  (macro S-´ i)
 )
 
+;;(defchordsv2
+;;    (x e) ` 90 first-release ()
+;;    (x r) ´ 90 first-release ()
+;;    (x w) S-´ 90 first-release ()
+;;    (x j) ñ 90 first-release ()
+;;    (x d) ç 90 first-release ()
+;;
+;;    (, j) ` 90 first-release ()
+;;    (, k) ´ 90 first-release ()
+;;    (, l) S-´ 90 first-release ()
+;;    (, n) ñ 90 first-release ()
+;;    (, c) ç 90 first-release ()
+;;)
+;;(deflayer accent-left
+;;       _  _  _ @è  _  _      _ @ù @ì @ò  _  _       _
+;;       _ @à  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
+;;                _    _    _    _    _
+;;)
+;;(deflayer accent-right
+;;       _  _  _ @é  _  _      _ @ú @í @ó  _  _       _
+;;       _ @á  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  ç  _  _      ñ  _  _  _  _  _
+;;                _    _    _    _    _
+;;)
+;;(deflayer accent-dieresis
+;;       _  _  _  _  _  _      _ @ü @ï  _  _  _       _
+;;       _  _  _  _  _  _      _  _  _  _  _  _
+;;       _  _  _  _  _  _      _  _  _  _  _  _
+;;                _    _    _    _    _
+;;)

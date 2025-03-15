@@ -1,0 +1,125 @@
+arch = [
+    # This :>
+    "metapac-bin",
+    "paru",
+    "pacman-contrib",
+
+    # Linux things
+    "linux",
+    "linux-firmware",
+    "linux-headers",
+    "base",  # base packages
+    "base-devel",  # base development packages
+    # "acpi",  # battery info
+    "grub",
+    "os-prober",  # grub os detection
+    "efibootmgr",  # efi boot manager
+    "ly",  # login manager
+    "intel-ucode",  # intel microcode (cpu firmware)
+    "ntfs-3g",  # ntfs support
+    "zram-generator",  # zram swap
+
+    "tlp",  # battery management
+    "smartmontools",  # disk health monitoring
+    # "tlpui",  # battery management
+
+    # Networking
+    "networkmanager",
+    "wireless_tools",
+    "iwd",  # wifi
+    # "network-manager-applet",
+
+    # Audio
+    "sof-firmware",  # sound firmware
+    "wireplumber",  # audio server
+    "pipewire",  # audio server
+    "pipewire-alsa",
+    "pipewire-jack",
+    "pipewire-pulse",
+    "libpulse",  # pulseaudio compatibility
+    "gst-plugin-pipewire",
+
+    # Bluetooth
+    # "blueman",
+    "bluez",
+    "bluez-utils",
+    "bluetui",
+
+    # Utils
+    "bottom",
+    # "brightnessctl",
+    "ripgrep-all",
+    "cameractrls",
+    "dkms",
+    "htop",
+    "wget",
+    "gparted",
+    "nautilus",
+    "neofetch",
+    "vim",
+    "kanata-bin",
+    # "ventoy-bin",
+
+    # Apps
+    "discord",
+    "spotify-launcher",
+    "spotify-player-full-pipe",
+    "steam",
+    "google-chrome",
+    # "zen-browser-bin",
+    "keepassxc",
+    "obsidian",
+    "vlc",
+    "virtualbox",
+
+    # Development
+    "fish",
+    "neovim",
+    "wezterm",
+    # "ghostty",
+    # "kitty",
+    "git",
+    "github-cli",
+    "jupyter-notebook",
+    "lazygit",
+    "mosh",
+    # "tmux",
+    "npm",
+    "nodejs",
+    "rust",
+    "rust-analyzer",
+    "sagemath",
+    "pyenv",
+
+    # Hyprland
+    "hyprland",
+    "hyprpaper",
+    "hyprpicker",
+    "hyprshot",
+    "xdg-desktop-portal-hyprland",
+    "xdg-desktop-portal-gtk",
+
+    "rofi-wayland",
+    "swaync",
+    "waybar",
+
+     # Nvidia
+    "nvidia",
+    "nvidia-settings",
+    "libva-nvidia-driver",
+    "nvtop",
+    "mesa-utils",  # glxinfo
+
+    # Fonts
+    "ttf-jetbrains-mono-nerd",
+    "ttf-maple-beta-nf",
+    "noto-fonts-emoji",
+
+    # GTK
+    "lxappearance-gtk3",
+    "gtk-engine-murrine",
+    "kanagawa-gtk-theme-git",
+    "kanagawa-icon-theme-git",
+]
+cargo = ["lolcrab"]
+

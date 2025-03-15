@@ -1,0 +1,170 @@
+{
+    "layer": "top", // Waybar at top layer
+    "position": "top", // Waybar position (top|bottom|left|right)
+    //"spacing": 5, // Gaps between modules (4px)
+    "reload_style_on_change": true,
+
+    "modules-left": ["hyprland/workspaces", "backlight", "pulseaudio", "bluetooth" , "custom/updates"],
+    "modules-center": ["clock"],
+    "modules-right": ["network", "cpu", "memory", "battery", "notification", "tray"],
+
+    // Modules configuration
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "on-click": "activate",
+        "format": "{name}",
+    },
+    "custom/notification": {
+        "tooltip": false,
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "<span foreground='red'><sup></sup></span>",
+            "none": "",
+            "dnd-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-none": "",
+            "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "inhibited-none": "",
+            "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+            "dnd-inhibited-none": ""
+        },
+        "return-type": "json",
+        "exec-if": "which swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+    "keyboard-state": {
+        "numlock": false,
+        "capslock": false,
+        "format": "{name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+    "hyprland/window": {
+        "max-length": 51,
+        "separate-outputs": true
+    },
+    "hyprland/language": {
+        "format": "{}",
+        "max-length": 19
+    },
+    "mpd": {
+        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+        "format-disconnected": "Disconnected ",
+        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+        "unknown-tag": "N/A",
+        "interval": 3,
+        "consume-icons": {
+            "on": " "
+        },
+        "random-icons": {
+            "off": "<span color=\"#f54c3c\"></span> ",
+            "on": " "
+        },
+        "repeat-icons": {
+            "on": " "
+        },
+        "single-icons": {
+            "on": "2 "
+        },
+        "state-icons": {
+            "paused": "",
+            "playing": ""
+        },
+        "tooltip-format": "MPD (connected)",
+        "tooltip-format-disconnected": "MPD (disconnected)"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        "spacing": 1
+    },
+    "clock": {
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%d-%m-%Y}",
+    },
+    "cpu": {
+        "interval": 2,
+        "format": "<span color=\"#F0C674\">CPU</span> {usage}%",
+        "tooltip": true
+    },
+    "memory": {
+        "interval": 2,
+        "format": "<span color=\"#F0C674\">RAM</span> {}%"
+    },
+    "backlight": {
+        "format": "<span color=\"#F0C674\">BRT</span> {percent}%",
+    },
+    "battery": {
+        "states": {
+            // "good": 96,
+            "warning": 31,
+            "critical": 16
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% 🗲",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat3": {
+        "bat": "BAT3"
+    },
+    "network": {
+        //"interface": "wlan1", // (Optional) To force the use of this interface
+        "interval": 2,
+        "format-wifi": "<span color=\"#F0C674\">WIFI</span> <span color=\"#888888\">{essid}</span> {bandwidthDownBytes}",
+        "format-ethernet": "<span color=\"#F0C674\">ETH</span> <span color=\"#888888\">{ipaddr}</span> {bandwidthDownBytes}",
+        "tooltip-format": "{ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "<span color=\"#F0C674\">NET</span> :(",
+        "on-click": "kitty --class floating sh -c nmtui",
+        //"format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        "scroll-step": 5, // %, can be a float
+        "format": "<span color=\"#F0C674\">VOL</span> {volume}%",
+        "format-bluetooth": "<span color=\"#F0C674\">VOL</span> {volume}%",
+        "format-bluetooth-muted": "<span color=\"#F0C674\">VOL</span> muted",
+        "format-muted": "<span color=\"#F0C674\">VOL</span> muted",
+        //"format-source": "{volume}% ",
+        //"format-source-muted": "",
+        //"format-icons": {
+        //    "headphone": "",
+        //    "hands-free": "",
+        //    "headset": "",
+        //    "phone": "",
+        //    "portable": "",
+        //    "car": "",
+        //    "default": ["", "", ""]
+        //},
+        //"on-click": "pavucontrol"
+    },
+    "bluetooth": {
+        "on-click": "kitty --class floating sh -c bluetui",
+        "format-on": "󰂯",
+        "format-off": "󰂲",
+        "format-connected": " <span color=\"#888888\">{device_alias}</span>",
+        "format-disabled": "",
+    }, 
+    //"custom/updates": { "format": "{} {icon}",
+    //	"return-type": "json",
+    //	"format-icons": {
+    //		"has-updates": "󱍷",
+    //		"updated": "󰂪"
+    //	},
+    //	"exec-if": "which waybar-module-pacman-updates",
+    //	"exec": "waybar-module-pacman-updates --interval-seconds 6 --network-interval-seconds 300 --tooltip-align-columns 'Source Code Pro'"
+    //},
+}
+
