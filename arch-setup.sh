@@ -34,6 +34,9 @@ create_symlink kanata ~/.config/kanata
 sudo_create_symlink kanata/kanata.service /lib/systemd/system/kanata.service
 sudo systemctl enable kanata
 
+create_symlink himawari-wallpaper/himawari.timer ~/.config/systemd/user/himawari.timer
+create_symlink himawari-wallpaper/himawari.service ~/.config/systemd/user/himawari.service
+
 # create_symlink i3 ~/.config/i3
 # create_symlink polybar ~/.config/polybar
 # create_symlink picom ~/.config/picom

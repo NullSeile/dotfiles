@@ -47,7 +47,7 @@ arch = [
 
     # Utils
     "bottom",
-    # "brightnessctl",
+    "brightnessctl",
     "ripgrep-all",
     "cameractrls",
     "dkms",
@@ -58,6 +58,7 @@ arch = [
     "neofetch",
     "vim",
     "kanata-bin",
+    "imagemagick",
     # "ventoy-bin",
 
     # Apps
@@ -65,9 +66,11 @@ arch = [
     "spotify-launcher",
     "spotify-player-full-pipe",
     "steam",
+    "heroic-games-launcher-bin",
     "google-chrome",
     # "zen-browser-bin",
     "keepassxc",
+    "gimp",
     "obsidian",
     "vlc",
     "virtualbox",
@@ -76,14 +79,14 @@ arch = [
     "fish",
     "neovim",
     "wezterm",
-    # "ghostty",
-    # "kitty",
+    "ghostty",
+    "kitty",
     "git",
     "github-cli",
     "jupyter-notebook",
     "lazygit",
     "mosh",
-    # "tmux",
+    "tmux",
     "npm",
     "nodejs",
     "rust",
@@ -109,6 +112,7 @@ arch = [
     "libva-nvidia-driver",
     "nvtop",
     "mesa-utils",  # glxinfo
+    "gamescope",
 
     # Fonts
     "ttf-jetbrains-mono-nerd",

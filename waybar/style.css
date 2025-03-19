@@ -34,20 +34,25 @@
 }
 
 #waybar > box > box > widget:not(:first-child) > * {
-    padding-left: 1.5em;
+    padding-left: calc(0.75em + 1px);
     /*border-left: 2px solid @text;*/
-  background-image: linear-gradient(@text);
+    background-image: linear-gradient(@text);
     /*background-color: red;*/
-  background-size: 1.5px 1.1em;
-  /*background-size: 2px 2px;*/
-  background-position: calc(0.75em - 1px) 50%;
-  background-repeat:no-repeat;
+    background-size: 1.5px 1.1em;
+    /*background-size: 2px 2px;*/
+    background-position: 0 50%;
+    background-repeat:no-repeat;
 }
 
-/*#waybar > box > box > widget:not(:last-child) > * {*/
-/*    padding-right: 0.5em;*/
-/*}*/
+#waybar > box > box > widget:not(:last-child) > * {
+    padding-right: calc(0.75em - 1px);
+}
 
+
+#waybar #image {
+    padding-right: 0;
+    padding-left: 2px;
+}
 
 /*#waybar > box:nth-child(2) > box > *:not(:first-child) > label {*/
 /*}*/
@@ -116,10 +121,10 @@
 /*#mode, #battery, #cpu, #memory, #network, #pulseaudio, #idle_inhibitor, #backlight, #custom-storage, #custom-updates, #custom-weather, #custom-mail, #clock, #temperature, #language, #custom-notification, #bluetooth{*/
 /*    margin: 4px 2px;*/
 /*    padding: 0 6px;*/
-    /* background-color: @base-highlight; */
-    /*border-left: 1px solid @text;*/
-    /* border-radius: 4px; */
-    /*min-width: 20px;*/
+/* background-color: @base-highlight; */
+/*border-left: 1px solid @text;*/
+/* border-radius: 4px; */
+/*min-width: 20px;*/
 /*}*/
 
 /*#pulseaudio.muted {*/
@@ -148,7 +153,7 @@
 /*    font-weight: 400;*/
 /*    font-family: sans-serif;*/
 /*    padding: 10px;*/
-    /*background: green !important;*/
+/*background: green !important;*/
 /*}*/
 
 /*#language {*/

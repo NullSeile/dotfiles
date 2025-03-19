@@ -4,11 +4,17 @@
     //"spacing": 5, // Gaps between modules (4px)
     "reload_style_on_change": true,
 
-    "modules-left": ["hyprland/workspaces", "backlight", "pulseaudio", "bluetooth" , "custom/updates"],
+    "modules-left": ["hyprland/workspaces", "image", "backlight", "pulseaudio", "bluetooth"],
+    //"modules-left": ["hyprland/workspaces", "backlight", "pulseaudio", "bluetooth"],
     "modules-center": ["clock"],
-    "modules-right": ["network", "cpu", "memory", "battery", "notification", "tray"],
+    "modules-right": ["network", "custom/gpu", "cpu", "memory", "battery", "tray"],
 
     // Modules configuration
+    "image": {
+        "exec": "bash /home/lia/dotfiles/waybar/cat.sh",
+        "size": 58,
+        "interval": 1,
+    },
     "hyprland/workspaces": {
         "disable-scroll": true,
         "on-click": "activate",
@@ -34,62 +40,17 @@
         "on-click-right": "swaync-client -d -sw",
         "escape": true
     },
-    "keyboard-state": {
-        "numlock": false,
-        "capslock": false,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-    "hyprland/window": {
-        "max-length": 51,
-        "separate-outputs": true
-    },
-    "hyprland/language": {
-        "format": "{}",
-        "max-length": 19
-    },
-    "mpd": {
-        "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
-        "format-disconnected": "Disconnected ",
-        "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
-        "unknown-tag": "N/A",
-        "interval": 3,
-        "consume-icons": {
-            "on": " "
-        },
-        "random-icons": {
-            "off": "<span color=\"#f54c3c\"></span> ",
-            "on": " "
-        },
-        "repeat-icons": {
-            "on": " "
-        },
-        "single-icons": {
-            "on": "2 "
-        },
-        "state-icons": {
-            "paused": "",
-            "playing": ""
-        },
-        "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
-    },
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": "",
-            "deactivated": ""
-        }
-    },
     "tray": {
         "spacing": 1
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%d-%m-%Y}",
+    },
+    "custom/gpu": {
+        "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",
+        "format": "<span color=\"#F0C674\">GPU</span> {}%",
+        "interval": 3
     },
     "cpu": {
         "interval": 2,
@@ -112,10 +73,9 @@
         "format": "{capacity}% {icon}",
         "format-charging": "{capacity}% 🗲",
         "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
+        "format-alt": "{time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
     },
     "battery#bat3": {
         "bat": "BAT3"
@@ -129,26 +89,14 @@
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "<span color=\"#F0C674\">NET</span> :(",
         "on-click": "kitty --class floating sh -c nmtui",
-        //"format-alt": "{ifname}: {ipaddr}/{cidr}"
     },
     "pulseaudio": {
         "scroll-step": 5, // %, can be a float
         "format": "<span color=\"#F0C674\">VOL</span> {volume}%",
         "format-bluetooth": "<span color=\"#F0C674\">VOL</span> {volume}%",
-        "format-bluetooth-muted": "<span color=\"#F0C674\">VOL</span> muted",
-        "format-muted": "<span color=\"#F0C674\">VOL</span> muted",
-        //"format-source": "{volume}% ",
-        //"format-source-muted": "",
-        //"format-icons": {
-        //    "headphone": "",
-        //    "hands-free": "",
-        //    "headset": "",
-        //    "phone": "",
-        //    "portable": "",
-        //    "car": "",
-        //    "default": ["", "", ""]
-        //},
-        //"on-click": "pavucontrol"
+        "format-bluetooth-muted": "<span color=\"#888888\">muted</span>",
+        "format-muted": "<span color=\"#888888\">muted</span>",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     },
     "bluetooth": {
         "on-click": "kitty --class floating sh -c bluetui",
@@ -156,15 +104,6 @@
         "format-off": "󰂲",
         "format-connected": " <span color=\"#888888\">{device_alias}</span>",
         "format-disabled": "",
-    }, 
-    //"custom/updates": { "format": "{} {icon}",
-    //	"return-type": "json",
-    //	"format-icons": {
-    //		"has-updates": "󱍷",
-    //		"updated": "󰂪"
-    //	},
-    //	"exec-if": "which waybar-module-pacman-updates",
-    //	"exec": "waybar-module-pacman-updates --interval-seconds 6 --network-interval-seconds 300 --tooltip-align-columns 'Source Code Pro'"
-    //},
+    },
 }
 
