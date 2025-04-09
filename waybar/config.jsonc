@@ -4,8 +4,8 @@
     //"spacing": 5, // Gaps between modules (4px)
     "reload_style_on_change": true,
 
-    "modules-left": ["hyprland/workspaces", "image", "backlight", "pulseaudio", "bluetooth"],
-    //"modules-left": ["hyprland/workspaces", "backlight", "pulseaudio", "bluetooth"],
+    //"modules-left": ["hyprland/workspaces", "image", "backlight", "pulseaudio", "bluetooth"],
+    "modules-left": ["hyprland/workspaces", "backlight", "pulseaudio", "bluetooth"],
     "modules-center": ["clock"],
     "modules-right": ["network", "custom/gpu", "cpu", "memory", "battery", "tray"],
 
@@ -88,7 +88,7 @@
         "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "<span color=\"#F0C674\">NET</span> :(",
-        "on-click": "kitty --class floating sh -c nmtui",
+        "on-click": "kitty --class floating sh -c impala",
     },
     "pulseaudio": {
         "scroll-step": 5, // %, can be a float
