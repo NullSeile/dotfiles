@@ -79,6 +79,13 @@
 /*    margin: 0 5px;*/
 /*}*/
 
+/* #workspaces button:hover { */
+    /* background: yellow; */
+    /* color: red; */
+    /* min-width: 13px; */
+    /* padding: 0 4px; */
+/* } */
+
 #workspaces button {
     min-height: 0;
     min-width: 13px;
@@ -91,17 +98,22 @@
     color: @base05;
 }
 
-#workspaces button.visible {
-}
+/* #workspaces button:hover { */
+/*     color: purple; */
+/*     background: green; */
+/* } */
+/* #workspaces button.visible { */
+/* } */
 
 #workspaces button.active {
     border-radius: 4px;
-    background-color: @base-highlight;
+    background: @base-highlight;
 }
 
 #workspaces button.urgent {
     color: rgba(238, 46, 36, 1);
 }
+
 
 /*#tray {*/
 /*    margin: 4px 4px 4px 4px;*/

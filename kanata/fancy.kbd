@@ -51,9 +51,9 @@
 (deflayer symbol-shift
        _  _  _  _  _  _      _  _  _  _  _  _
 
-       _  ¡  _ @€  _  _      _  _  _  _ @¿  del     _
+       _  ¡  _ @€  _  _      _  ◀◀ ▶⏸ ▶▶ @¿ del     _
        _  _ @] @} @⟯  _      ◀  ▼  ▲  ▶  _  _
-       _  _  _  _  _  _      🔅 🔆 🔊 🔉 _  _
+       _  _  _  _  _  _      🔉 🔊 🔅 🔆 _  _
                    _ _ _    _ _ _
 )
 (deflayer accents-right
@@ -85,7 +85,7 @@
     ;;acr (layer-while-held accents-right)
     ;;acr (tap-hold 100 250 (one-shot-press 300 (layer-while-held accent-right)) alt)
     ;;acl (tap-hold 100 150 (one-shot-press 300 (layer-while-held accent-left)) alt)
-    ;;acl alt
+    ;;acl al
     ;;acr alt
 
     '  (fork ' S-2 (sft))
@@ -119,7 +119,10 @@
 
     ◌̀ (multi ` (release-key alt))
     ◌́ (multi ´ (release-key alt))
-    ◌̈ (multi S-´ (release-key alt))
+    ◌̈ (unmod (alt) ´)
+    ;;◌̀ `
+    ;;◌́ ´
+    ;;◌̈ S-´
     ç (unmod (alt) ç)
     ñ (unmod (alt) ñ)
 

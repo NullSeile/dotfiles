@@ -65,15 +65,15 @@
         "format": "<span color=\"#F0C674\">BRT</span> {percent}%",
     },
     "battery": {
-        "states": {
-            // "good": 96,
-            "warning": 31,
-            "critical": 16
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% 🗲",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time}",
+        // "states": {
+        //     // "good": 96,
+        //     "warning": 31,
+        //     "critical": 16
+        // },
+        "interval": 2,
+        "format": "<span color=\"#F0C674\">BAT</span> {capacity}%",
+        "format-charging": "<span color=\"#F0C674\">BAT</span> <span color=\"#aaaaaa\">\udb85\udc0b</span>{capacity}%",
+        "tooltip-format": "{timeTo}\n{power}W",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
     },
