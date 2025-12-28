@@ -15,10 +15,11 @@ set $purple #957FB8
 set $aqua #6A9589
 set $gray #a89984
 set $darkgray #1d2021
+set $trans #00000000
 
 client.focused          $blue $blue $darkgray #F0C674 #F0C674
 client.focused_inactive $darkgray $darkgray $yellow $purple $gray
-client.unfocused        $darkgray $darkgray $yellow $purple $gray
+client.unfocused        $darkgray $darkgray $yellow $purple $bg
 client.urgent           $red $red $white $red $red
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -53,13 +54,13 @@ exec --no-startup-id dex --autostart --environment i3
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-# exec --no-startup-id nm-applet
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
 
 # exec --no-startup-id /usr/libexec/gnome-flashback-media-keys
 
 # Start Rofication for notifications
 exec --no-startup-id dunst
-exec --no-startup-id blueman-applet
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -73,17 +74,17 @@ for_window [class="regolith-control-center"] floating enable
 bindsym $mod+i exec regolith-control-center
 # bindsym $win+w exec regolith-control-center wifi
 # bindsym $win+b exec regolith-control-center bluetooth
-# bindsym $win+Shift+c exec --no-startup-id gpick -s
+bindsym $mod+Shift+c exec --no-startup-id gpick -s
 
 bindsym $mod+space exec rofi -show drun
 # bindsym $mod+space exec --no-startup-id ilia -p apps
 # bindsym $win+n exec --no-startup-id ilia -p notifications
 
 # Start a terminal
-bindsym $mod+Return exec wezterm-gui
+bindsym $mod+Return exec kitty
 
 # Start browser
-bindsym $mod+Shift+Return exec google-chrome-stable
+bindsym $mod+Shift+Return exec zen-browser
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -178,7 +179,7 @@ bindsym $mod+Shift+Control+$k0 move container to workspace number $ws10
 # reload the configuration file
 # bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+c restart
+bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 # bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 

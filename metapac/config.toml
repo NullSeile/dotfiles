@@ -1,2 +1,5 @@
-arch_package_manager = "paru"
+enabled_backends = ["arch"]
+
+[arch]
+package_manager = "yay"
 

@@ -2,7 +2,7 @@
 @theme "/usr/share/rofi/themes/gruvbox-dark.rasi"
 
 configuration {
-    modes: "window,drun,run,ssh,combi";
+    modes: "combi,calc";
     font: "JetBrains Mono 12";
 }
 

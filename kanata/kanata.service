@@ -14,7 +14,7 @@ Environment=PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:%h/.cargo/bin
 ; IOSchedulingClass=realtime
 ; Nice=-20
 Type=simple
-ExecStart=kanata -c /home/lia/.config/kanata/fancy.kbd -c /home/lia/.config/kanata/kanata.kbd
+ExecStart=kanata -c /home/lia/.config/kanata/kanata.kbd -c /home/lia/.config/kanata/configs/lia.kbd
 Restart=no
 
 [Install]

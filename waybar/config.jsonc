@@ -41,11 +41,11 @@
         "escape": true
     },
     "tray": {
-        "spacing": 1
+        "spacing": 3
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%d-%m-%Y}",
+        "format-alt": "{:%d/%m/%Y}",
     },
     "custom/gpu": {
         "exec": "nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits",

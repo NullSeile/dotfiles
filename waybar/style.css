@@ -36,7 +36,7 @@
 #waybar > box > box > widget:not(:first-child) > * {
     padding-left: calc(0.75em + 1px);
     /*border-left: 2px solid @text;*/
-    background-image: linear-gradient(@text);
+    background-image: linear-gradient(#888888);
     /*background-color: red;*/
     background-size: 1.5px 1.1em;
     /*background-size: 2px 2px;*/

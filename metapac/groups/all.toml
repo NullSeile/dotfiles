@@ -1,8 +1,20 @@
 arch = [
     # This :>
-    "metapac-bin",
-    "paru",
+    "metapac",
+    "yay",
     "pacman-contrib",
+
+    # QGIS
+    "qgis",
+    "python-gdal",
+
+    ## Drain
+    "gmsh-bin",
+    "python-shapely",
+    "python-rasterio",
+
+    "podofo",
+    "cfitsio",
 
     # Linux things
     "linux",
@@ -18,6 +30,7 @@ arch = [
     "intel-ucode",  # intel microcode (cpu firmware)
     "ntfs-3g",  # ntfs support
     "zram-generator",  # zram swap
+    "gvfs-smb",  # smb support
 
     "tlp",  # battery management
     "smartmontools",  # disk health monitoring
@@ -27,7 +40,15 @@ arch = [
     "networkmanager",
     "wireless_tools",
     "iwd",  # wifi
-    # "network-manager-applet",
+    "impala", # network manager frontend
+    "network-manager-applet",
+    "linux-wifi-hotspot-bin",
+
+    "networkmanager-openvpn",  # openvpn support
+    "networkmanager-l2tp",  # l2tp support (manresa vpn)
+    "strongswan",  # ipsec support (manresa vpn)
+    "forticlient-vpn", # fortinet vpn client (guk vpn)
+    "wireguird",  # wireguard support
 
     # Audio
     "sof-firmware",  # sound firmware
@@ -59,55 +80,87 @@ arch = [
     "vim",
     "kanata-bin",
     "imagemagick",
-    # "ventoy-bin",
+    "less",
+    "systemctl-tui",
+    "qdirstat-bin",
+    "ventoy-bin",
+    "7zip",
+    "fzf",
+    "yazi", # file manager
 
     # Apps
     "discord",
     "spotify-launcher",
-    "spotify-player-full-pipe",
-    "steam",
-    "heroic-games-launcher-bin",
-    "google-chrome",
-    # "zen-browser-bin",
+    "spicetify-marketplace-bin", # spicetify marketplace
+    # "google-chrome",
+    "zen-browser-bin",
     "keepassxc",
     "gimp",
     "obsidian",
     "vlc",
     "virtualbox",
+    # "nchat",
+    "krita",
+    "libreoffice-fresh",
+
+    # Gaming
+    "steam",
+    "heroic-games-launcher-bin",
+    "minecraft-launcher",
+    "jre-openjdk", # java runtime for mods
+    "olympus", # celeste plugin manager
 
     # Development
     "fish",
     "neovim",
+    "visual-studio-code-bin",
     "wezterm",
     "ghostty",
     "kitty",
     "git",
     "github-cli",
-    "jupyter-notebook",
     "lazygit",
+    "clang",
     "mosh",
+    "sshfs",
     "tmux",
     "npm",
+    "yarn",
     "nodejs",
-    "rust",
+    "rustup",
     "rust-analyzer",
     "sagemath",
     "pyenv",
+    "pyenv-virtualenv",
+    "go",
+    "dbeaver",
+    "webkit2gtk", # for map preview in dbeaver
+    "docker",
+    "docker-compose",
+    "jupyter-notebook",
+    "jupyterlab-widgets",
+    "valgrind",
+    "typst",
+    "python-jupyterlab-vim",
+    "python-jupytext",
+    "python-pynvim",
 
     # Hyprland
     "hyprland",
     "hyprpaper",
     "hyprpicker",
     "hyprshot",
+    "hyprpolkitagent",
     "xdg-desktop-portal-hyprland",
     "xdg-desktop-portal-gtk",
-
-    "rofi-wayland",
+    "rofi",
     "swaync",
     "waybar",
+    "xorg-xhost", # Allow access to X server
+    "uwsm",
 
      # Nvidia
-    "nvidia",
+    "nvidia-open",
     "nvidia-settings",
     "libva-nvidia-driver",
     "nvtop",
@@ -116,11 +169,11 @@ arch = [
 
     # Fonts
     "ttf-jetbrains-mono-nerd",
-    "ttf-maple-beta-nf",
+    "maplemono-nf-cn",
     "noto-fonts-emoji",
 
     # GTK
-    "lxappearance-gtk3",
+    "lxappearance",
     "gtk-engine-murrine",
     "kanagawa-gtk-theme-git",
     "kanagawa-icon-theme-git",

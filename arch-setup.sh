@@ -23,6 +23,7 @@ create_symlink tmux ~/.config/tmux
 
 create_symlink wezterm ~/.config/wezterm
 create_symlink kitty ~/.config/kitty
+create_symlink ghostty ~/.config/ghostty
 
 create_symlink metapac ~/.config/metapac
 
