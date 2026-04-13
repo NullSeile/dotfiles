@@ -18,27 +18,18 @@ function sudo_create_symlink() {
     sudo ln -s "$dir/$1" "$2"
 }
 
-create_symlink nvim ~/.config/nvim
-create_symlink tmux ~/.config/tmux
-
-create_symlink wezterm ~/.config/wezterm
-create_symlink kitty ~/.config/kitty
 create_symlink ghostty ~/.config/ghostty
+create_symlink tmux ~/.config/tmux
+create_symlink fish ~/.config/fish
+create_symlink nvim ~/.config/nvim
 
 create_symlink metapac ~/.config/metapac
 
 create_symlink hypr ~/.config/hypr
-create_symlink waybar ~/.config/waybar
-create_symlink rofi ~/.config/rofi
+# create_symlink sway ~/.config/sway
+create_symlink noctalia ~/.config/noctalia
 
 create_symlink kanata ~/.config/kanata
 sudo_create_symlink kanata/kanata.service /lib/systemd/system/kanata.service
 sudo systemctl enable kanata
-
-create_symlink himawari-wallpaper/himawari.timer ~/.config/systemd/user/himawari.timer
-create_symlink himawari-wallpaper/himawari.service ~/.config/systemd/user/himawari.service
-
-# create_symlink i3 ~/.config/i3
-# create_symlink polybar ~/.config/polybar
-# create_symlink picom ~/.config/picom
 
