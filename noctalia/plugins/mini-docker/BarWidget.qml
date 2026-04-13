@@ -15,6 +15,8 @@ Item {
     property ShellScreen screen
     property string widgetId: ""
     property string section: ""
+    property int sectionWidgetIndex: -1
+    property int sectionWidgetsCount: 0
     property real baseSize: Style.capsuleHeight
     property bool applyUiScale: false
     property string tooltipText: dockerAvailable ? (pluginApi ? pluginApi.tr("tooltip.running_containers").arg(runningCount) : "Containers: " + runningCount) : (pluginApi ? pluginApi.tr("tooltip.docker_not_available") : "Docker not available")

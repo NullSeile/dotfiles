@@ -1,4 +1,4 @@
-arch = [
+arch = { packages = [
     # This :>
     "metapac",
     "yay",
@@ -144,6 +144,9 @@ arch = [
     "python-jupyterlab-vim",
     "python-jupytext",
     "python-pynvim",
+    "zig",
+    "qmk",
+
 
     # Hyprland
     "hyprland",
@@ -177,6 +180,6 @@ arch = [
     "gtk-engine-murrine",
     "kanagawa-gtk-theme-git",
     "kanagawa-icon-theme-git",
-]
-cargo = ["lolcrab"]
+]}
+# cargo = ["lolcrab"]
 

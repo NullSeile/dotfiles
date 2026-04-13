@@ -1,7 +1,7 @@
 {
   "updateIntervalMinutes": 30,
   "updateTerminalCommand": "ghostty -e",
-  "currentIconName": "world-download",
+  "currentIconName": "arrow-bar-to-down",
   "hideOnZero": true,
   "customCmdGetNumUpdates": "",
   "customCmdDoSystemUpdate": ""

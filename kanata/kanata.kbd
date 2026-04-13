@@ -5,6 +5,7 @@
 (defsrc)
 (deflayermap default
     caps @cap
+    ret @ret
     prtsc (tap-dance 200 (lrld lrld-next))
     ins (tap-dance 200 (caps (layer-switch none)))
 )
@@ -27,5 +28,6 @@
 
 (defalias
     cap (tap-hold-press 100 250 esc lctl)
+    ret (tap-hold-press 100 250 ret lctl)
 )
 
