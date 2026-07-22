@@ -1,8 +1,0 @@
-{
-  "updateIntervalMinutes": 30,
-  "updateTerminalCommand": "ghostty -e",
-  "currentIconName": "arrow-bar-to-down",
-  "hideOnZero": true,
-  "customCmdGetNumUpdates": "",
-  "customCmdDoSystemUpdate": ""
-}

@@ -1,0 +1,12 @@
+id = "nullptr/fish"
+name = "Fish"
+version = "0.1.0"
+plugin_api = 3
+description = "A plugin that provides Fish shell support."
+
+[[launcher_provider]]
+id = "fish"
+entry = "fish.luau"
+prefix = ">"
+include_in_global_search = true
+

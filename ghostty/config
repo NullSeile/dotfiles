@@ -1,4 +1,4 @@
-font-family = "Maple Mono NF CN"
+font-family = "Maple Mono"
 font-feature = "+ss01, +ss02, +ss07, +ss11"
 command = fish
 shell-integration = fish

@@ -1,0 +1,64 @@
+---
+- name: Setup Arch Linux Dotfiles and Configurations
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars:
+    dotfiles_dir: "{{ playbook_dir }}"
+
+  tasks:
+    - name: Ensure ~/.config directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config"
+        state: directory
+        mode: '0755'
+
+    - name: Ensure ~/.config/systemd/user directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/systemd/user"
+        state: directory
+        mode: '0755'
+
+    - name: Create dotfile symlinks
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/{{ item.src }}"
+        dest: "{{ ansible_facts['env']['HOME'] }}/{{ item.dest }}"
+        state: link
+        force: yes
+      loop:
+        - { src: "ghostty", dest: ".config/ghostty" }
+        - { src: "tmux", dest: ".config/tmux" }
+        - { src: "fish", dest: ".config/fish" }
+        - { src: "nvim", dest: ".config/nvim" }
+        - { src: "metapac", dest: ".config/metapac" }
+        - { src: "hypr", dest: ".config/hypr" }
+        - { src: "noctalia", dest: ".config/noctalia" }
+        - { src: "walker", dest: ".config/walker" }
+        - { src: "walker/walker.service", dest: ".config/systemd/user/walker.service" }
+        - { src: "kanata", dest: ".config/kanata" }
+        - { src: "kanata/kanata.service", dest: ".config/systemd/user/kanata.service" }
+        - { src: "himawari-wallpaper/himawari.service", dest: ".config/systemd/user/himawari.service" }
+        - { src: "himawari-wallpaper/himawari.timer", dest: ".config/systemd/user/himawari.timer" }
+
+    - name: Ensure uinput group exists
+      ansible.builtin.group:
+        name: uinput
+        state: present
+      become: yes
+
+    - name: Add user to input and uinput groups
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        groups: input,uinput
+        append: yes
+      become: yes
+
+    - name: Enable systemd user services
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: yes
+        scope: user
+        daemon_reload: yes
+      loop:
+        - kanata
+        - walker
