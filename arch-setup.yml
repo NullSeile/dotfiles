@@ -11,13 +11,18 @@
       ansible.builtin.pacman:
         name:
           - neovim
+          - tree-sitter-cli
+          - cmake
           - tmux
           - fish
           - hyprland
+          - uwsm
           - ghostty
           - noctalia
           - swaybg
           - ly
+          - vesktop
+          - helium-browser-bin
         state: present
       become: yes
 
@@ -37,6 +42,14 @@
       ansible.builtin.systemd:
         name: ly@tty1.service
         enabled: yes
+      become: yes
+
+    - name: Ly config symlink
+      ansible.builtin.file:
+        src: "{{ dotfiles_dir }}/ly/ly.conf"
+        dest: "/etc/ly/config.ini"
+        state: link
+        force: yes
       become: yes
 
     - name: Ensure ~/.config directory exists
@@ -62,7 +75,6 @@
         - { src: "tmux", dest: ".config/tmux" }
         - { src: "fish", dest: ".config/fish" }
         - { src: "nvim", dest: ".config/nvim" }
-        - { src: "ly", dest: ".config/ly" }
         # - { src: "metapac", dest: ".config/metapac" }
         - { src: "hypr", dest: ".config/hypr" }
         - { src: "noctalia", dest: ".config/noctalia" }
