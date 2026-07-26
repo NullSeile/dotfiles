@@ -46,7 +46,7 @@
 
     - name: Ly config symlink
       ansible.builtin.file:
-        src: "{{ dotfiles_dir }}/ly/ly.conf"
+        src: "{{ dotfiles_dir }}/ly/config.ini"
         dest: "/etc/ly/config.ini"
         state: link
         force: yes
