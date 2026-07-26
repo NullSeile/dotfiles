@@ -78,6 +78,7 @@
         # - { src: "metapac", dest: ".config/metapac" }
         - { src: "hypr", dest: ".config/hypr" }
         - { src: "noctalia", dest: ".config/noctalia" }
+        - { src: "noctalia/settings.toml", dest: ".local/state/noctalia/settings.toml" }
         # - { src: "walker", dest: ".config/walker" }
         # - { src: "walker/walker.service", dest: ".config/systemd/user/walker.service" }
         - { src: "kanata", dest: ".config/kanata" }
