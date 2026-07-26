@@ -66,11 +66,14 @@
         force: yes
       become: yes
 
-    - name: Ensure ~/.config directory exists
+    - name: Ensure directories exists
       ansible.builtin.file:
-        path: "{{ ansible_facts['env']['HOME'] }}/.config"
+        path: "{{ item }}"
         state: directory
         mode: '0755'
+      loop:
+        - "{{ ansible_facts['env']['HOME'] }}/.config"
+        - "{{ ansible_facts['env']['HOME'] }}/.local/state/noctalia"
 
     - name: Ensure ~/.config/systemd/user directory exists
       ansible.builtin.file:
