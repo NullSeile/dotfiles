@@ -10,19 +10,33 @@
     - name: Install required packages
       ansible.builtin.pacman:
         name:
+          - hyprland
+          - hyprpicker
+          - nautilus
+          - swaybg
+          - noctalia
+          - playerctl
+
+          - ly
+          - uwsm
+          - network-manager-applet
+
           - neovim
           - tree-sitter-cli
-          - cmake
+
+          - cmake # needed for hyprpm
+          - yazi
+          - lazygit
           - tmux
+          - uv
           - fish
-          - hyprland
-          - uwsm
+          - github-cli
+
           - ghostty
-          - noctalia
-          - swaybg
-          - ly
           - vesktop
           - helium-browser-bin
+          - keepassxc
+
         state: present
       become: yes
 
@@ -75,12 +89,10 @@
         - { src: "tmux", dest: ".config/tmux" }
         - { src: "fish", dest: ".config/fish" }
         - { src: "nvim", dest: ".config/nvim" }
-        # - { src: "metapac", dest: ".config/metapac" }
+        - { src: "yay", dest: ".config/yay" }
         - { src: "hypr", dest: ".config/hypr" }
         - { src: "noctalia", dest: ".config/noctalia" }
         - { src: "noctalia/settings.toml", dest: ".local/state/noctalia/settings.toml" }
-        # - { src: "walker", dest: ".config/walker" }
-        # - { src: "walker/walker.service", dest: ".config/systemd/user/walker.service" }
         - { src: "kanata", dest: ".config/kanata" }
         - { src: "kanata/kanata.service", dest: ".config/systemd/user/kanata.service" }
         - { src: "himawari-wallpaper/himawari.service", dest: ".config/systemd/user/himawari.service" }
@@ -113,4 +125,3 @@
         daemon_reload: yes
       loop:
         - kanata
-        # - walker
