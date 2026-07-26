@@ -7,6 +7,38 @@
     dotfiles_dir: "{{ playbook_dir }}"
 
   tasks:
+    - name: Install required packages
+      ansible.builtin.pacman:
+        name:
+          - neovim
+          - tmux
+          - fish
+          - hyprland
+          - ghostty
+          - noctalia
+          - swaybg
+          - ly
+        state: present
+      become: yes
+
+    - name: Set fish as the default shell for the user
+      ansible.builtin.user:
+        name: "{{ ansible_facts['user_id'] }}"
+        shell: /usr/bin/fish
+      become: yes
+
+    - name: Remove getty as the default display manager
+      ansible.builtin.systemd:
+        name: getty@tty1.service
+        enabled: no
+      become: yes
+
+    - name: Enable ly as the default display manager
+      ansible.builtin.systemd:
+        name: ly@tty1.service
+        enabled: yes
+      become: yes
+
     - name: Ensure ~/.config directory exists
       ansible.builtin.file:
         path: "{{ ansible_facts['env']['HOME'] }}/.config"
@@ -30,11 +62,12 @@
         - { src: "tmux", dest: ".config/tmux" }
         - { src: "fish", dest: ".config/fish" }
         - { src: "nvim", dest: ".config/nvim" }
-        - { src: "metapac", dest: ".config/metapac" }
+        - { src: "ly", dest: ".config/ly" }
+        # - { src: "metapac", dest: ".config/metapac" }
         - { src: "hypr", dest: ".config/hypr" }
         - { src: "noctalia", dest: ".config/noctalia" }
-        - { src: "walker", dest: ".config/walker" }
-        - { src: "walker/walker.service", dest: ".config/systemd/user/walker.service" }
+        # - { src: "walker", dest: ".config/walker" }
+        # - { src: "walker/walker.service", dest: ".config/systemd/user/walker.service" }
         - { src: "kanata", dest: ".config/kanata" }
         - { src: "kanata/kanata.service", dest: ".config/systemd/user/kanata.service" }
         - { src: "himawari-wallpaper/himawari.service", dest: ".config/systemd/user/himawari.service" }
@@ -61,4 +94,4 @@
         daemon_reload: yes
       loop:
         - kanata
-        - walker
+        # - walker
