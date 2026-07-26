@@ -11,11 +11,17 @@
       ansible.builtin.pacman:
         name:
           - hyprland
+          - xdg-desktop-portal-hyprland
           - hyprpicker
           - nautilus
           - swaybg
           - noctalia
           - playerctl
+          - libinput-tools
+          - evtest
+          - wl-clipboard
+          - mise
+          - usage
 
           - ly
           - uwsm
