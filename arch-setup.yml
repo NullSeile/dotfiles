@@ -89,7 +89,7 @@
     - name: Install tmux tpm plugin manager
       ansible.builtin.git:
         repo: "https://github.com/tmux-plugins/tpm"
-        dest: "{{ ansible_facts['env']['HOME'] }}/.config/tmux/plugins/tpm"
+        dest: "{{ ansible_facts['env']['HOME'] }}/.tmux/plugins/tpm"
         update: yes
 
     - name: Ensure uinput group exists
