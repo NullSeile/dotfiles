@@ -120,6 +120,19 @@
         append: yes
       become: yes
 
+    - name: Load uinput kernel module
+      community.general.modprobe:
+        name: uinput
+        state: present
+
+    - name: Create udev rule for uinput
+      ansible.builtin.copy:
+        dest: /etc/udev/rules.d/99-input.rules
+        content: |
+          KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
+        mode: '0644'
+      notify: Reload udev rules
+
     - name: Enable systemd user services
       ansible.builtin.systemd:
         name: "{{ item }}"
