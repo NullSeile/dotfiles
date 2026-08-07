@@ -266,3 +266,13 @@ hl.window_rule({
     },
     border_color = colors.error,
 })
+
+-- Prevent the KDE Connect background window from stealing fullscreen focus
+hl.window_rule({
+    match = { class = "org.kde.kdeconnect.daemon" },
+    suppress_event = "fullscreen",
+    no_initial_focus = true,
+    float = true,
+    move = { 0, 0 },
+    size = { 1920, 1080 },
+})

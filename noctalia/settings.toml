@@ -121,10 +121,15 @@ widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1" ]
 
 [plugin_settings."h465855hgg/lyrics"]
 animation = "fade"
+char_width = 5
 custom_url = "https://lyricsplus.prjktla.my.id/v2/lyrics/get?title={title}&artist={artist}"
 display_mode = "lyrics"
+double_line = false
+lyrics_source = "auto"
 marquee_speed = 50
-scroll_mode = "static"
+max_chars = 25
+max_lines = 1
+scroll_mode = "auto"
 selector_placement = "floating"
 
 [plugin_settings."nightwatch75/todo"]
@@ -297,8 +302,8 @@ type = "noctalia/example:hello"
 type = "rxtsel/portctl:indicator"
 
 [widget.lyrics]
+hide_when_no_lyrics = true
 hide_when_paused = true
-show_artist = false
 show_cover = false
 show_glyph = false
 type = "h465855hgg/lyrics:lyrics"

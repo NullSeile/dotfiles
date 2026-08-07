@@ -2,13 +2,13 @@
 - name: Setup Arch Linux Dotfiles and Configurations
   hosts: localhost
   connection: local
-  gather_facts: yes
+  gather_facts: true
   vars:
     dotfiles_dir: "{{ playbook_dir }}"
 
   tasks:
     - name: Install required packages
-      ansible.builtin.pacman:
+      community.general.pacman:
         name:
           - hyprland
           - xdg-desktop-portal-hyprland
@@ -38,39 +38,41 @@
           - fish
           - github-cli
 
+          - syncthing
+          - tailscale
           - ghostty
           - vesktop
           - helium-browser-bin
           - keepassxc
 
         state: present
-      become: yes
+      become: true
 
     - name: Set fish as the default shell for the user
       ansible.builtin.user:
         name: "{{ ansible_facts['user_id'] }}"
         shell: /usr/bin/fish
-      become: yes
+      become: true
 
     - name: Remove getty as the default display manager
       ansible.builtin.systemd:
         name: getty@tty1.service
-        enabled: no
-      become: yes
+        enabled: false
+      become: true
 
     - name: Enable ly as the default display manager
       ansible.builtin.systemd:
         name: ly@tty1.service
-        enabled: yes
-      become: yes
+        enabled: true
+      become: true
 
     - name: Ly config symlink
       ansible.builtin.file:
         src: "{{ dotfiles_dir }}/ly/config.ini"
         dest: "/etc/ly/config.ini"
         state: link
-        force: yes
-      become: yes
+        force: true
+      become: true
 
     - name: Ensure directories exists
       ansible.builtin.file:
@@ -92,7 +94,7 @@
         src: "{{ dotfiles_dir }}/{{ item.src }}"
         dest: "{{ ansible_facts['env']['HOME'] }}/{{ item.dest }}"
         state: link
-        force: yes
+        force: true
       loop:
         - { src: "ghostty", dest: ".config/ghostty" }
         - { src: "tmux", dest: ".config/tmux" }
@@ -111,25 +113,26 @@
       ansible.builtin.git:
         repo: "https://github.com/tmux-plugins/tpm"
         dest: "{{ ansible_facts['env']['HOME'] }}/.tmux/plugins/tpm"
-        update: yes
+        update: true
 
     - name: Ensure uinput group exists
       ansible.builtin.group:
         name: uinput
         state: present
-      become: yes
+      become: true
 
     - name: Add user to input and uinput groups
       ansible.builtin.user:
         name: "{{ ansible_facts['user_id'] }}"
         groups: input,uinput
-        append: yes
-      become: yes
+        append: true
+      become: true
 
     - name: Load uinput kernel module
       community.general.modprobe:
         name: uinput
         state: present
+      become: true
 
     - name: Create udev rule for uinput
       ansible.builtin.copy:
@@ -137,13 +140,15 @@
         content: |
           KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"
         mode: '0644'
-      notify: Reload udev rules
+      become: true
 
     - name: Enable systemd user services
       ansible.builtin.systemd:
         name: "{{ item }}"
-        enabled: yes
+        enabled: true
         scope: user
-        daemon_reload: yes
+        daemon_reload: true
       loop:
         - kanata
+
+# vim: set ft=yaml.ansible :
