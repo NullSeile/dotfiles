@@ -1,0 +1,16 @@
+[include]
+files = ["./base"]
+
+[shell]
+corner_radius_scale = 0.0
+
+[bar.bar]
+background_opacity = 1.0
+capsule_radius = 0
+margin_ends = 0
+margin_edge = 0
+
+[widget.cat-kanata]
+type = "nullptr/bongocat:cat-kanata"
+capsule_radius = 0
+

@@ -1,0 +1,44 @@
+[shell]
+font_family = "Maple Mono"
+password_style = "random"
+avatar_path = "/home/lia/Pictures/2025-06-16-230436_hyprshot.png"
+
+[shell.animation]
+speed = 2.0
+
+[shell.panel]
+control_center_placement = "floating"
+session_placement = "floating"
+wallpaper_placement = "floating"
+open_near_click_control_center = true
+shadow = false
+
+[theme]
+builtin = "Kanagawa"
+community_palette = "Rose Pine Moon"
+source = "builtin"
+
+[theme.templates]
+builtin_ids = [
+    "btop",
+    "cava",
+    "gtk3",
+    "gtk4",
+    "ghostty",
+    "hyprland",
+    "kcolorscheme",
+    "qt",
+]
+community_ids = [
+    "opencode",
+    "spicetify",
+    "zen-browser",
+    "discord",
+    "obsidian",
+    "steam",
+    "zathura",
+    "hyprtoolkit",
+    "bat",
+    "lazygit",
+]
+

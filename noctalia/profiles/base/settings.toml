@@ -1,0 +1,37 @@
+[audio]
+enable_overdrive = true
+
+[brightness]
+enable_ddcutil = true
+
+[calendar]
+enabled = true
+refresh_minutes = 5
+
+    [calendar.account.personal_google]
+    name = "Google"
+    type = "google"
+
+[desktop_widgets]
+enabled = false
+
+[location]
+address = "Cerdanyola, Spain"
+
+[wallpaper]
+enabled = false
+
+[shell]
+external_ip_enabled = true
+launch_apps_as_systemd_services = true
+polkit_agent = true
+settings_show_advanced = true
+telemetry_enabled = true
+
+[shell.launcher]
+categories = false
+compact = true
+session_search = true
+
+[shell.launcher.providers.session]
+global = true

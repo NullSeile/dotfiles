@@ -2,6 +2,7 @@
 
 local primary = "rgb(76946a)"
 local surface = "rgb(1f1f28)"
+local surface_variant = "rgb(2a2a37)"
 local secondary = "rgb(c0a36e)"
 local error = "rgb(c34043)"
 
@@ -38,8 +39,9 @@ return {
     colors = {
         primary = primary,
         surface = surface,
+        surface_variant = surface_variant,
         secondary = secondary,
         error = error,
     },
-    apply_theme = apply_theme
+    apply_theme = apply_theme,
 }

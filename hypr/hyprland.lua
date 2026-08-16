@@ -3,13 +3,13 @@
 ------------------
 
 -- hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "auto", scale = "auto" })
-hl.monitor({ output = "eDP-1", mode = "1920x1080@144", position = "auto", scale = "auto" })
 -- hl.monitor({ output = "eDP-1", mode = "1920x1080@144", position = "auto", scale = "auto" })
-hl.monitor({
-    output = "HDMI-A-1",
-    mode = "highrr",
-    position = "auto-left",
-})
+-- hl.monitor({ output = "eDP-1", mode = "1920x1080@144", position = "auto", scale = "auto" })
+-- hl.monitor({
+--     output = "HDMI-A-1",
+--     mode = "highrr",
+--     position = "auto-left",
+-- })
 -- hl.monitor({
 --     output = "HDMI-A-1",
 --     mode = "1920x1080@60",
@@ -18,12 +18,12 @@ hl.monitor({
 -- })
 
 -- For Noctalia Color templates
-local noctalia = require("noctalia")
-local colors = noctalia.colors
-noctalia.apply_theme()
 
 hl.config({
-    debug = { suppress_errors = false },
+    debug = {
+        suppress_errors = false,
+        -- disable_logs = false,
+    },
 })
 
 ---------------------
@@ -43,7 +43,6 @@ local terminal = "GTK_IM_MODULE=simple ghostty"
 local browser = "zen-browser"
 local fileManager = "nautilus"
 local menu = ipc .. "panel-toggle launcher"
--- local menu = "walker"
 
 -------------------
 ---- AUTOSTART ----
@@ -55,19 +54,17 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("nm-applet")
     hl.exec_cmd("hyprpm reload -n")
     hl.exec_cmd("swaybg -i /home/lia/dotfiles/himawari-wallpaper/lastest.png -m fill")
-    -- hl.exec_cmd("qs -c noctalia-shell")
     hl.exec_cmd("noctalia")
     hl.exec_cmd("systemctl --user start himawari.service")
-    -- hl.exec_cmd("systemctl --user start hyprpolkitagent")
-    hl.exec_cmd("walker --gapplication-service")
 end)
 
 -------------------------------
 ---- ENVIRONMENT VARIABLES ----
 -------------------------------
 
--- hl.env("XCURSOR_SIZE", "24")
--- hl.env("HYPRCURSOR_SIZE", "24")
+hl.env("XCURSOR_THEME", "Bibata-Original-Classic")
+hl.env("XCURSOR_SIZE", "24")
+
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
@@ -87,80 +84,147 @@ hl.env("XMODIFIERS", "@im=ibus")
 -----------------------
 ---- LOOK AND FEEL ----
 -----------------------
+local function set_noctalia_profile(profile)
+    local home = os.getenv("HOME")
+    local path = home .. "/.config/noctalia/active-profile.toml"
 
-hl.config({
-    cursor = { no_hardware_cursors = true },
+    local f = io.open(path, "w")
+    if not f then
+        hl.notification.create({ text = "Failed to write " .. path, timeout = 3000, icon = "error" })
+        return
+    end
 
-    general = {
-        snap = { enabled = true },
-        gaps_in = 5,
-        gaps_out = 10,
-        border_size = 2,
-        resize_on_border = true,
-        allow_tearing = false,
-        layout = USE_HY3 and "hy3" or "dwindle",
-    },
+    f:write('[include]\nfiles = ["profiles/' .. profile .. '"]\n')
+    f:close()
 
-    decoration = {
-        rounding = 5,
-        rounding_power = 2,
-        shadow = { enabled = false },
-        blur = { enabled = false },
-    },
+    -- reload noctalia so it picks up the change
+    -- hl.dispatch(hl.dsp.exec_cmd("noctalia msg config-reload"))
+end
 
-    animations = {
-        enabled = false, -- "no, please :)"
-    },
+local focus = false
+local function apply_config()
+    local noctalia = require("noctalia")
+    local colors = noctalia.colors
+    noctalia.apply_theme()
 
-    misc = {
-        force_default_wallpaper = 2,
-        disable_hyprland_logo = true,
-        enable_anr_dialog = false,
-        focus_on_activate = true,
-    },
+    set_noctalia_profile(focus and "focus.toml" or "base")
 
-    input = {
-        kb_layout = "es",
-        kb_variant = "",
-        kb_model = "",
-        kb_options = "",
-        kb_rules = "",
-        follow_mouse = 0,
-        float_switch_override_focus = 0,
-        sensitivity = 0,
-        touchpad = {
-            scroll_factor = 1,
-            natural_scroll = true,
-            disable_while_typing = false,
-        },
-    },
-})
+    if USE_HY3 then
+        hl.config({
+            plugin = {
+                hy3 = {
+                    tabs = {
+                        render_text = false,
+                        padding = focus and 0 or 5,
+                        radius = focus and 0 or 5,
+                        border_width = 0,
+                        height = 8,
 
-if USE_HY3 then
-    hl.config({
-        plugin = {
-            hy3 = {
-                tabs = {
-                    render_text = false,
-                    padding = 5,
-                    border_width = 0,
-                    height = 8,
-                    colors = {
-                        active = colors.secondary,
-                        active_alt_monitor = colors.primary,
-                        focused = colors.primary,
-                        inactive = colors.surface,
-                        urgent = colors.error,
+                        colors = {
+                            active = colors.secondary,
+                            active_border = colors.secondary,
+
+                            active_alt_monitor = colors.primary,
+                            active_alt_monitor_border = colors.primary,
+
+                            focused = colors.primary,
+                            focused_border = colors.primary,
+
+                            inactive = colors.surface,
+                            inactive_border = colors.surface_variant,
+
+                            urgent = colors.error,
+                            urgent_border = colors.error,
+                        },
+                    },
+                    autotile = {
+                        enable = true,
+                        ephemeral_groups = true,
                     },
                 },
-                autotile = {
-                    enable = true,
-                    ephemeral_groups = true,
-                },
+            },
+        })
+    end
+
+    hl.config({
+        cursor = {
+            no_hardware_cursors = true,
+            hide_on_key_press = false,
+            inactive_timeout = 2,
+        },
+
+        general = {
+            gaps_in = focus and 0 or 5,
+            gaps_out = focus and 0 or 10,
+            border_size = 2,
+
+            snap = { enabled = true },
+            resize_on_border = true,
+            allow_tearing = false,
+            layout = USE_HY3 and "hy3" or "dwindle",
+        },
+
+        decoration = {
+            rounding = focus and 0 or 5,
+            rounding_power = 2,
+            shadow = { enabled = false },
+            blur = { enabled = false },
+        },
+
+        animations = {
+            enabled = false, -- "no, please :)"
+        },
+
+        misc = {
+            force_default_wallpaper = 2,
+            disable_hyprland_logo = true,
+            enable_anr_dialog = false,
+            focus_on_activate = true,
+        },
+
+        input = {
+            kb_layout = "es",
+            kb_variant = "",
+            kb_model = "",
+            kb_options = "",
+            kb_rules = "",
+            follow_mouse = true,
+            float_switch_override_focus = 0,
+            sensitivity = 0,
+            numlock_by_default = true,
+            touchpad = {
+                scroll_factor = 1,
+                natural_scroll = true,
+                disable_while_typing = false,
             },
         },
     })
+
+    hl.window_rule({
+        match = {
+            workspace = "w[t1]",
+            fullscreen_state_client = 0,
+            float = false,
+        },
+        border_size = 0,
+        rounding = focus and 0 or 7,
+    })
+
+    hl.window_rule({
+        match = {
+            fullscreen_state_client = 1,
+        },
+        border_color = colors.secondary,
+    })
+
+    hl.window_rule({
+        match = {
+            xwayland = 1,
+        },
+        border_color = colors.error,
+    })
 end
+apply_config()
 
 ---------------------
 ---- KEYBINDINGS ----
@@ -193,7 +257,13 @@ else
     hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
 end
 
+hl.bind(mainMod .. " + CONTROL + F", function()
+    focus = not focus
+    apply_config()
+end)
+
 hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(ipc .. "screenshot-region"))
+hl.bind(mainMod .. " + CONTROL + SHIFT + S", hl.dsp.exec_cmd(ipc .. "panel-toggle alexander/screen-toolkit:panel"))
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.exec_cmd(ipc .. "plugin oldirtty/color_picker:service all pick"))
 hl.bind(mainMod .. " + CONTROL + SHIFT + C", hl.dsp.exec_cmd(ipc .. "panel-toggle oldirtty/color_picker:panel"))
 
@@ -235,9 +305,16 @@ end
 hl.bind(wmMod .. " + backspace", hl.dsp.workspace.toggle_special(""))
 hl.bind(wmMod .. " + SHIFT + backspace", hl.dsp.window.move({ workspace = "special" }))
 
--- Move/resize windows with mainMod + LMB/RMB and dragging
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
-hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+local dragBind = hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
+local reiszeBind = hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
+
+local function updateDragBind(w)
+    local enabled = w ~= nil and w.fullscreen == 0
+    dragBind:set_enabled(enabled)
+    reiszeBind:set_enabled(enabled)
+end
+hl.on("window.active", updateDragBind)
+hl.on("window.fullscreen", updateDragBind)
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), { repeating = true })
@@ -253,26 +330,16 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
-hl.window_rule({
-    match = {
-        fullscreen_state_client = 1,
-    },
-    border_color = colors.secondary,
-})
-
-hl.window_rule({
-    match = {
-        xwayland = 1,
-    },
-    border_color = colors.error,
-})
-
 -- Prevent the KDE Connect background window from stealing fullscreen focus
 hl.window_rule({
     match = { class = "org.kde.kdeconnect.daemon" },
     suppress_event = "fullscreen",
     no_initial_focus = true,
+    border_size = 0,
     float = true,
     move = { 0, 0 },
     size = { 1920, 1080 },
 })
+
+-- HyprMod managed settings
+require("hyprland-gui")

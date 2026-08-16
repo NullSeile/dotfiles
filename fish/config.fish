@@ -18,12 +18,10 @@ function y
     rm -f -- "$tmp"
 end
 
-# pyenv init - fish | source
-# status --is-interactive; and pyenv virtualenv-init - | source
-
 # Restart your shell for the changes to take effect.
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
+
 
 mise activate fish | source

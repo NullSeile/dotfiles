@@ -81,7 +81,6 @@
         mode: '0755'
       loop:
         - "{{ ansible_facts['env']['HOME'] }}/.config"
-        - "{{ ansible_facts['env']['HOME'] }}/.local/state/noctalia"
 
     - name: Ensure ~/.config/systemd/user directory exists
       ansible.builtin.file:
@@ -103,7 +102,6 @@
         - { src: "yay", dest: ".config/yay" }
         - { src: "hypr", dest: ".config/hypr" }
         - { src: "noctalia", dest: ".config/noctalia" }
-        - { src: "noctalia/settings.toml", dest: ".local/state/noctalia/settings.toml" }
         - { src: "kanata", dest: ".config/kanata" }
         - { src: "kanata/kanata.service", dest: ".config/systemd/user/kanata.service" }
         - { src: "himawari-wallpaper/himawari.service", dest: ".config/systemd/user/himawari.service" }
@@ -151,4 +149,4 @@
       loop:
         - kanata
 
-# vim: set ft=yaml.ansible :
+# vim: set ft=yaml.ansible

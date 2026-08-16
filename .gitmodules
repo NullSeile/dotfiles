@@ -1,9 +1,6 @@
 [submodule "nvim"]
 	path = nvim
 	url = https://github.com/NullSeile/nvim-config.git
-[submodule "zebar/nullptr-bar"]
-	path = zebar/nullptr-bar
-	url = https://github.com/NullSeile/nullptr-bar.git
 [submodule "himawari-wallpaper"]
 	path = himawari-wallpaper
 	url = https://github.com/NullSeile/himawari-wallpaper.git

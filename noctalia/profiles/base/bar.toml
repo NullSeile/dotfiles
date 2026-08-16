@@ -1,0 +1,90 @@
+[bar]
+order = [ "bar" ]
+
+[bar.bar.dead_zone.actions]
+middle = "settings-toggle"
+
+[bar.bar]
+background_opacity = 0.0
+capsule = true
+capsule_radius = 8
+concave_edge_corners = false
+capsule_thickness = 1
+font_weight = 400
+margin_edge = 8
+margin_ends = 10
+padding = 0
+shadow = false
+thickness = 26
+widget_spacing = 4
+
+start = [ "workspaces", "volume", "brightness", "media", "lyrics", "bluetooth" ]
+center = [ "clock", "privacy" ]
+end = [ "network", "battery", "group:sys_monitor", "tray", "cat-kanata" ]
+
+[widget.workspaces]
+font_weight = 700
+focused_output_only = true
+
+[widget.volume]
+show_label = false
+
+[widget.brightness]
+show_label = false
+
+[widget.media]
+hide_when_no_media = true
+max_length = 170
+title_scroll = "on_hover"
+
+[widget.lyrics]
+type = "h465855hgg/lyrics:lyrics"
+hide_when_no_lyrics = true
+hide_when_paused = true
+show_cover = false
+show_glyph = false
+
+[widget.bluetooth]
+show_label = true
+
+
+[widget.clock]
+anchor = true
+format = "{:%H:%M} {:%a}, {:%b} {:%d}"
+tooltip_format = "{:%F} {:%H:%M:%S}"
+
+[widget.privacy]
+hide_inactive = true
+
+
+[widget.battery]
+hide_when_full = true
+
+[[bar.bar.capsule_group]]
+id = "sys_monitor"
+members = [ "cpu", "gpu", "temp", "ram" ]
+
+[widget.cpu]
+visualization = "none"
+
+[widget.gpu]
+type = "sysmon"
+stat = "gpu_usage"
+visualization = "none"
+
+[widget.temp]
+display = "text"
+visualization = "none"
+
+[widget.ram]
+stat = "ram_pct"
+visualization = "none"
+
+[widget.tray]
+hidden = [ "nm-applet" ]
+
+[widget.cat-kanata]
+type = "nullptr/bongocat:cat-kanata"
+capsule_padding = 2
+capsule_radius = 5
+scale = 1.5

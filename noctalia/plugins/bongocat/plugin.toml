@@ -17,7 +17,7 @@ description = "A cat that slaps your bar when you type or to the beat."
 tags = ["fun", "animation"]
 
 [[widget]]
-id = "cat (kanata)"
+id = "cat-kanata"
 entry = "bongocat.luau"
 
   [[widget.setting]]
