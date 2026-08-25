@@ -1,15 +1,15 @@
 [plugins]
-auto_update = false
+# auto_update = false
 enabled = [
     "noctalia/translator",
     "nullptr/fish",
     "oldirtty/color_picker",
-    "h465855hgg/lyrics",
     "noctalia/example",
     "noctalia/kaomoji",
     "k4n4t4/hypr-submap",
     "alexander/screen-toolkit",
-    "nullptr/bongocat"
+    "nullptr/bongocat",
+    "nullptr/lyrics"
 ]
 
 [[plugins.source]]
@@ -27,6 +27,10 @@ kind = "path"
 location = "~/dotfiles/noctalia/plugins"
 name = "dev"
 
+[plugin_settings."nullptr/lyrics"]
+allow_plain_text = false
+enhanced = true
+selector_placement = "floating"
 
 [plugin_settings."h465855hgg/lyrics"]
 animation = "fade"

@@ -24,6 +24,7 @@ end = [ "network", "battery", "group:sys_monitor", "tray", "cat-kanata" ]
 
 [widget.workspaces]
 font_weight = 700
+scroll_repeat = "steps"
 focused_output_only = true
 
 [widget.volume]
@@ -38,11 +39,9 @@ max_length = 170
 title_scroll = "on_hover"
 
 [widget.lyrics]
-type = "h465855hgg/lyrics:lyrics"
-hide_when_no_lyrics = true
-hide_when_paused = true
-show_cover = false
-show_glyph = false
+max_chars = 25
+show_translation = false
+type = "nullptr/lyrics:lyrics"
 
 [widget.bluetooth]
 show_label = true
@@ -73,7 +72,6 @@ stat = "gpu_usage"
 visualization = "none"
 
 [widget.temp]
-display = "text"
 visualization = "none"
 
 [widget.ram]
@@ -85,6 +83,7 @@ hidden = [ "nm-applet" ]
 
 [widget.cat-kanata]
 type = "nullptr/bongocat:cat-kanata"
+capsule = true
 capsule_padding = 2
 capsule_radius = 5
 scale = 1.5

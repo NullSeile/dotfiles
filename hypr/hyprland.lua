@@ -22,7 +22,7 @@
 hl.config({
     debug = {
         suppress_errors = false,
-        -- disable_logs = false,
+        disable_logs = false,
     },
 })
 
@@ -40,7 +40,7 @@ end
 local ipc = "noctalia msg "
 -- local ipc = "qs -c noctalia-shell ipc call"
 local terminal = "GTK_IM_MODULE=simple ghostty"
-local browser = "zen-browser"
+local browser = "helium-browser"
 local fileManager = "nautilus"
 local menu = ipc .. "panel-toggle launcher"
 
@@ -53,9 +53,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("syncthing --no-browser")
     hl.exec_cmd("nm-applet")
     hl.exec_cmd("hyprpm reload -n")
-    hl.exec_cmd("swaybg -i /home/lia/dotfiles/himawari-wallpaper/lastest.png -m fill")
+    -- hl.exec_cmd("systemctl --user start himawari.service")
+    -- hl.exec_cmd("swaybg -i /home/lia/dotfiles/himawari-wallpaper/lastest.png -m fill")
     hl.exec_cmd("noctalia")
-    hl.exec_cmd("systemctl --user start himawari.service")
 end)
 
 -------------------------------
@@ -102,6 +102,32 @@ local function set_noctalia_profile(profile)
 end
 
 local focus = false
+
+local function update_borders()
+    local ws = hl.get_active_workspace()
+    if ws == nil then
+        return
+    end
+    local windows = hl.get_workspace_windows(ws)
+    local n_visible = 0
+    for _, win in ipairs(windows) do
+        if win.visible then
+            n_visible = n_visible + 1
+        end
+    end
+
+    hl.window_rule({
+        match = {
+            workspace = ws.name,
+            fullscreen_state_client = 0,
+            float = false,
+        },
+        border_size = n_visible == 1 and 0 or 2,
+        rounding = focus and 0 or (n_visible == 1 and 7 or 5),
+    })
+    -- hl.dispatch(hy3.debug_nodes())
+end
+
 local function apply_config()
     local noctalia = require("noctalia")
     local colors = noctalia.colors
@@ -184,6 +210,7 @@ local function apply_config()
 
         input = {
             kb_layout = "es",
+            resolve_binds_by_sym = true,
             kb_variant = "",
             kb_model = "",
             kb_options = "",
@@ -200,16 +227,16 @@ local function apply_config()
         },
     })
 
-    hl.window_rule({
-        match = {
-            workspace = "w[t1]",
-            fullscreen_state_client = 0,
-            float = false,
-        },
-        border_size = 0,
-        rounding = focus and 0 or 7,
-    })
-
+    -- hl.window_rule({
+    --     match = {
+    --         workspace = "w[t1]",
+    --         fullscreen_state_client = 0,
+    --         float = false,
+    --     },
+    --     border_size = 0,
+    --     rounding = focus and 0 or 7,
+    -- })
+    --
     hl.window_rule({
         match = {
             fullscreen_state_client = 1,
@@ -223,6 +250,8 @@ local function apply_config()
         },
         border_color = colors.error,
     })
+
+    update_borders()
 end
 apply_config()
 
@@ -241,7 +270,10 @@ hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + SHIFT + RETURN", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + CONTROL + RETURN", hl.dsp.exec_cmd(ipc .. "bar-toggle"))
 hl.bind(mainMod .. " + SHIFT + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + SHIFT + SPACE", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + SHIFT + 2", function()
+    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+    update_borders()
+end)
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + CONTROL + SPACE", hl.dsp.exec_cmd(menu))
 
@@ -251,7 +283,10 @@ hl.bind(mainMod .. " + Z", hl.dsp.window.fullscreen({ action = "toggle", mode = 
 
 -- hy3 specific dispatchers or dwindle fallback
 if USE_HY3 then
-    hl.bind(mainMod .. " + W", hy3.change_group("toggletab"))
+    hl.bind(mainMod .. " + W", function()
+        hl.dispatch(hy3.change_group("toggletab"))
+        update_borders()
+    end)
 else
     hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
     hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
@@ -279,10 +314,28 @@ if USE_HY3 then
     hl.bind(mainMod .. " + k", hy3.move_focus("u", { wrap = false }))
     hl.bind(mainMod .. " + j", hy3.move_focus("d", { wrap = false }))
 
-    hl.bind(mainMod .. " + SHIFT + h", hy3.move_window("l"))
-    hl.bind(mainMod .. " + SHIFT + l", hy3.move_window("r"))
-    hl.bind(mainMod .. " + SHIFT + k", hy3.move_window("u"))
-    hl.bind(mainMod .. " + SHIFT + j", hy3.move_window("d"))
+    local function smart_move(dir)
+        return function()
+            local win = hl.get_active_window() -- confirm exact call in your hl version
+            if win and win.floating then
+                hl.dispatch(hl.dsp.window.move({
+                    x = dir == "l" and -50 or dir == "r" and 50 or 0,
+                    y = dir == "u" and -50 or dir == "d" and 50 or 0,
+                    relative = true,
+                }))
+            else
+                hl.dispatch(hy3.move_window(dir, { once = true }))
+                update_borders()
+            end
+        end
+    end
+
+    hl.bind(mainMod .. " + SHIFT + h", smart_move("l"), { repeating = true })
+    hl.bind(mainMod .. " + SHIFT + l", smart_move("r"), { repeating = true })
+    hl.bind(mainMod .. " + SHIFT + k", smart_move("u"), { repeating = true })
+    hl.bind(mainMod .. " + SHIFT + j", smart_move("d"), { repeating = true })
+
+    hl.bind(mainMod .. " + apostrophe", hy3.toggle_focus_layer())
 else
     hl.bind(mainMod .. " + h", hl.dsp.focus({ direction = "l" }))
     hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "r" }))
@@ -299,6 +352,7 @@ end
 local k = { m = 1, comma = 2, period = 3, j = 4, k = 5, l = 6, u = 7, i = 8, o = 9 }
 for key, num in pairs(k) do
     hl.bind(wmMod .. " + " .. key, hl.dsp.focus({ workspace = num }))
+    -- hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
     hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
 end
 
@@ -315,6 +369,16 @@ local function updateDragBind(w)
 end
 hl.on("window.active", updateDragBind)
 hl.on("window.fullscreen", updateDragBind)
+
+-- hl.on("workspace.active", update_borders)
+-- hl.on("window.move_to_workspace", update_borders)
+hl.on("window.open", function()
+    hl.timer(function()
+        update_borders()
+    end, { timeout = 1, type = "oneshot" })
+end)
+hl.on("window.destroy", update_borders)
+hl.on("window.active", update_borders)
 
 -- Laptop multimedia keys for volume and LCD brightness
 hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"), { repeating = true })

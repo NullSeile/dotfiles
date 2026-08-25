@@ -15,8 +15,8 @@ shadow = false
 
 [theme]
 builtin = "Kanagawa"
-community_palette = "Rose Pine Moon"
-source = "builtin"
+community_palette = "Kanagawa Dragon"
+source = "community"
 
 [theme.templates]
 builtin_ids = [
@@ -36,9 +36,16 @@ community_ids = [
     "discord",
     "obsidian",
     "steam",
+    "vicinae",
     "zathura",
     "hyprtoolkit",
     "bat",
     "lazygit",
+    "yazi"
 ]
+
+[wallpaper]
+enabled = true
+fill_mode = "fit"
+
 

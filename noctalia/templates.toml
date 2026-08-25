@@ -6,3 +6,9 @@ post_hook   = "pkill -SIGUSR1 nvim"
 [theme.templates.user.hyprland]
 input_path = "~/.config/noctalia/templates/hyprland/hyprland.lua"
 output_path = "~/.config/hypr/noctalia.lua"
+
+[theme.templates.user.bg]
+input_path = "~/.config/noctalia/templates/bg.py"
+output_path = "~/dev/background/bg.py"
+post_hook = "bash ~/dev/background/apply.sh"
+

@@ -1,5 +1,6 @@
 [lockscreen]
 wallpaper = "/home/lia/dotfiles/himawari-wallpaper/lastest.png"
+blurred_desktop = true
 
 [lockscreen_widgets]
 enabled = true
@@ -25,6 +26,8 @@ widget_order = [
     cx = 960.0
     cy = 898.0
     output = "HDMI-A-1"
+    placement_height = 0.0
+    placement_width = 0.0
     rotation = 0.0
     type = "login_box"
 
@@ -50,6 +53,8 @@ widget_order = [
     cx = 960.0
     cy = 910.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = 0.0
     type = "login_box"
 
@@ -75,6 +80,8 @@ widget_order = [
     cx = 1456.0
     cy = 364.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = 0.0
     type = "sysmon"
 
@@ -89,6 +96,8 @@ widget_order = [
     cx = 1456.0
     cy = 604.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = 0.0
     type = "weather"
 
@@ -101,6 +110,8 @@ widget_order = [
     cx = 960.0
     cy = 132.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = 0.0
     type = "clock"
 
@@ -115,6 +126,8 @@ widget_order = [
     cx = 504.0
     cy = 484.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = 0.0
     type = "media_player"
 
@@ -128,5 +141,7 @@ widget_order = [
     cx = 976.0
     cy = 484.0
     output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
     rotation = -0.0
     type = "calendar"

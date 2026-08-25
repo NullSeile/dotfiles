@@ -14,5 +14,4 @@ type = "power_profile"
 type = "clipboard"
 
 [[control_center.shortcuts]]
-type = "mic_mute"
-
+type = "alexander/screen-toolkit:toggle"

@@ -1,0 +1,68 @@
+{
+  "source_label": "Şarkı sözü kaynağı",
+  "select_lyrics": "Kaynağı seçmek için tıkla",
+  "panel": {
+    "clear_preference": "Varsayılan kaynağı kullan",
+    "close": "Kapat",
+    "enhanced": "Gelişmiş",
+    "lines": "satır",
+    "loading": "Şarkı sözleri aranıyor…",
+    "loading_hint": "Yapılandırılmış kaynaklar tek tek deneniyor.",
+    "loading_more": "Diğer kaynaklar aranıyor…",
+    "no_providers": "Şarkı sözü bulunamadı",
+    "no_track": "Çalan parça yok",
+    "saved": "Kayıtlı",
+    "source_count": "{count} kaynak mevcut",
+    "synced": "Eş zamanlı",
+    "title": "Şarkı sözü kaynakları",
+    "unsynced": "Eş zamanlı değil"
+  },
+  "settings": {
+    "active_color": {
+      "description": "Şu anki ve daha önce söylenmiş olan şarkı sözlerindeki karakterler için kullanılan renk. Varsayılan olarak arayüz yazı rengi kullanılır.",
+      "label": "Aktif şarkı sözü rengi"
+    },
+    "allow_plain_text": {
+      "description": "Hiçbir kaynak eş zamanlı söz sunmadığında eş zamanlanmamış sözlerine geri dön.",
+      "label": "Düz metin sözlerine izin ver"
+    },
+    "animation": {
+      "description": "Şarkı sözlerinin satır değişimine göre animasyonu.",
+      "label": "Animasyon",
+      "options": {
+        "blink": "Yanıp sönerek",
+        "cascade": "Karakter kademeli",
+        "fade": "Yalnızca solarak",
+        "karaoke": "Karaoke gradyanı + solma",
+        "none": "Animasyonsuz",
+        "pulse": "Nabız solması",
+        "typewriter": "Daktilo belirmesi",
+        "wave": "Dalga şeklinde karakterler"
+      }
+    },
+    "char_width": {
+      "description": "Araç genişliğini ayarlamak için kullanılan, karakter başına yaklaşık piksel genişliği.",
+      "label": "Karakter genişliği (px)"
+    },
+    "cue_font_mode": {
+      "description": "Giriş ve ara bölümlerindeki karakterlerin Noctalia arayüz fontunu mı yoksa başka bir fontu mu kullanacağını seçin.",
+      "label": "Giriş/ara yazı tipi modu",
+      "options": {
+        "custom": "Özel font",
+        "follow": "Arayüz fontunu kullan"
+      }
+    },
+    "double_line": {
+      "description": "Geçerli özgün şarkı sözünün altında çeviri veya romanizasyon göster.",
+      "label": "Çift satırlı şarkı sözleri"
+    },
+    "karaoke_enabled": {
+      "description": "Şarkı sözlerini karakter karakter vurgula. Gerçek zamanlama yoksa, aşağıdaki seçenek zorunlu kılmadıkça satır boyunca simüle edilir.",
+      "label": "Karakter karakter karaoke"
+    },
+    "karaoke_require_timing": {
+      "description": "Karakter karakter karaoke yalnızca kaynak kelime veya karakter zamanlaması verdiğinde çalışır. Yalnızca satır zamanlı sözler tamamen vurgulanır.",
+      "label": "Kelime zamanlaması gerekli"
+    }
+  }
+}

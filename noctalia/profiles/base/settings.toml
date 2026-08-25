@@ -18,8 +18,8 @@ enabled = false
 [location]
 address = "Cerdanyola, Spain"
 
-[wallpaper]
-enabled = false
+# [wallpaper]
+# enabled = false
 
 [shell]
 external_ip_enabled = true
@@ -31,7 +31,6 @@ telemetry_enabled = true
 [shell.launcher]
 categories = false
 compact = true
-session_search = true
 
 [shell.launcher.providers.session]
 global = true
