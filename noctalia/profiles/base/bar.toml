@@ -35,13 +35,16 @@ show_label = false
 
 [widget.media]
 hide_when_no_media = true
+show_progress = true
 max_length = 170
 title_scroll = "on_hover"
 
 [widget.lyrics]
-max_chars = 25
-show_translation = false
 type = "nullptr/lyrics:lyrics"
+animation = "none"
+enable_scroll = false
+lyrics_offset_ms = -800
+max_chars = 25
 
 [widget.bluetooth]
 show_label = true
@@ -85,5 +88,4 @@ hidden = [ "nm-applet" ]
 type = "nullptr/bongocat:cat-kanata"
 capsule = true
 capsule_padding = 2
-capsule_radius = 5
-scale = 1.5
+font_scale = 1.5

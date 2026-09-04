@@ -32,8 +32,7 @@
       "options": {
         "blink": "Yanıp sönerek",
         "cascade": "Karakter kademeli",
-        "fade": "Yalnızca solarak",
-        "karaoke": "Karaoke gradyanı + solma",
+        "fade": "Solan",
         "none": "Animasyonsuz",
         "pulse": "Nabız solması",
         "typewriter": "Daktilo belirmesi",
@@ -51,10 +50,6 @@
         "custom": "Özel font",
         "follow": "Arayüz fontunu kullan"
       }
-    },
-    "double_line": {
-      "description": "Geçerli özgün şarkı sözünün altında çeviri veya romanizasyon göster.",
-      "label": "Çift satırlı şarkı sözleri"
     },
     "karaoke_enabled": {
       "description": "Şarkı sözlerini karakter karakter vurgula. Gerçek zamanlama yoksa, aşağıdaki seçenek zorunlu kılmadıkça satır boyunca simüle edilir.",

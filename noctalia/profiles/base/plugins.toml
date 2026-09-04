@@ -28,22 +28,8 @@ location = "~/dotfiles/noctalia/plugins"
 name = "dev"
 
 [plugin_settings."nullptr/lyrics"]
+providers = [ "lrclib", "netease", "musixmatch" ]
 allow_plain_text = false
 enhanced = true
 selector_placement = "floating"
-
-[plugin_settings."h465855hgg/lyrics"]
-animation = "fade"
-char_width = 5
-custom_url = "https://lyricsplus.prjktla.my.id/v2/lyrics/get?title={title}&artist={artist}"
-display_mode = "lyrics"
-double_line = false
-lyrics_source = "auto"
-marquee_speed = 50
-max_chars = 25
-max_lines = 1
-scroll_mode = "auto"
-selector_placement = "floating"
-
-
 

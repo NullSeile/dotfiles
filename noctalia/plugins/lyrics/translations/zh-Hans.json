@@ -32,8 +32,7 @@
       "options": {
         "blink": "闪烁显现",
         "cascade": "字符级联淡入",
-        "fade": "仅淡入淡出",
-        "karaoke": "逐字渐变和淡入淡出",
+        "fade": "淡入淡出",
         "none": "无动画",
         "pulse": "脉冲淡入",
         "typewriter": "打字机显现",
@@ -59,18 +58,6 @@
     "cue_text": {
       "description": "前奏和间奏期间逐字点亮的文字或字符。",
       "label": "前奏/间奏字符"
-    },
-    "double_line": {
-      "description": "在原文歌词下方显示翻译或罗马音。",
-      "label": "双行歌词"
-    },
-    "double_line_auto_fit": {
-      "description": "在水平状态栏中缩小主副歌词字号和间距，避免胶囊外框裁剪第二行；垂直状态栏不受影响。",
-      "label": "双行紧凑模式"
-    },
-    "double_line_height_budget": {
-      "description": "水平状态栏可用于两行文字的近似总高度；数值越小，两行越紧凑。",
-      "label": "双行高度预算"
     },
     "enhanced": {
       "description": "在词源提供逐词时间时请求它们（Musixmatch richsync、网易云 YRC）。",
@@ -115,7 +102,7 @@
       "label": "暂停时隐藏"
     },
     "inactive_color": {
-      "description": "设置未唱歌词、暂停状态和次要歌词行的颜色。",
+      "description": "设置未唱歌词和暂停状态的颜色。",
       "label": "未唱歌词颜色"
     },
     "karaoke_enabled": {
@@ -126,10 +113,6 @@
       "description": "仅在词源提供逐字或逐词时间时启用逐字卡拉 OK。仅有行时间的歌词整行高亮。",
       "label": "需要逐词时间"
     },
-    "line_gap": {
-      "description": "原文、翻译和上下文歌词之间的间距。",
-      "label": "歌词行间距"
-    },
     "lyrics_offset_ms": {
       "description": "正值让歌词更早显示，负值让歌词更晚显示。",
       "label": "歌词延迟（毫秒）"
@@ -137,18 +120,6 @@
     "max_chars": {
       "description": "组件可见宽度（按字符格计）。长歌词会把当前唱到的字保持在中间。",
       "label": "最大字符数"
-    },
-    "max_lines": {
-      "description": "垂直状态栏中同时显示的歌词行数。",
-      "label": "最大行数"
-    },
-    "padding_left": {
-      "description": "组件内容左侧的空白。",
-      "label": "左边距"
-    },
-    "padding_right": {
-      "description": "组件内容右侧的空白。",
-      "label": "右边距"
     },
     "player_allowlist": {
       "description": "仅使用匹配的 MPRIS 播放器。留空表示允许全部；支持 * 通配符，可匹配播放器名称或实例名。",
@@ -162,51 +133,13 @@
       "description": "服务刷新 MPRIS 元数据和播放进度的间隔。",
       "label": "播放器轮询频率（毫秒）"
     },
-    "primary_font_size": {
-      "description": "原文歌词行的字号，0 表示跟随 Noctalia。",
-      "label": "主歌词字号"
+    "font_size": {
+      "description": "歌词行的字号，0 表示跟随 Noctalia。",
+      "label": "歌词字号"
     },
     "providers": {
       "description": "按顺序尝试的词源：lrclib、netease、qqmusic、kugou 或 musixmatch。",
       "label": "歌词词源"
-    },
-    "secondary_color": {
-      "description": "翻译和罗马音歌词使用的颜色。",
-      "label": "第二行歌词颜色"
-    },
-    "secondary_font_size": {
-      "description": "翻译和罗马音使用的字号。",
-      "label": "第二行字号"
-    },
-    "secondary_line_mode": {
-      "description": "选择附加歌词内容的优先顺序。",
-      "label": "第二行内容",
-      "options": {
-        "romanization": "仅罗马音",
-        "romanization_first": "罗马音优先，其次翻译",
-        "translation": "仅翻译",
-        "translation_first": "翻译优先，其次罗马音"
-      }
-    },
-    "show_translation": {
-      "description": "允许翻译歌词出现在第二行。",
-      "label": "显示翻译"
-    },
-    "show_romanization": {
-      "description": "允许罗马音或音译出现在第二行。",
-      "label": "显示罗马音"
-    },
-    "translation_language": {
-      "description": "优先使用的歌词翻译语言。Musixmatch、网易云和 QQ 音乐可能提供翻译。",
-      "label": "歌词翻译语言",
-      "options": {
-        "en": "英语",
-        "ja": "日语",
-        "ko": "韩语",
-        "none": "关闭",
-        "zh-hans": "简体中文",
-        "zh-hant": "繁体中文"
-      }
     }
   }
 }

@@ -252,5 +252,149 @@ class MainTest(unittest.TestCase):
         self.assertEqual(payload["type"], "none")
 
 
+class ParseLyricsfileTest(unittest.TestCase):
+    def _doc(self, **kw):
+        base = {
+            "version": "1.0",
+            "metadata": {"title": "T", "artist": "A"},
+            "lines": [],
+        }
+        base.update(kw)
+        import yaml
+        return yaml.dump(base)
+
+    def test_word_synced_lines(self):
+        doc = self._doc(lines=[{
+            "text": "Hello world",
+            "start_ms": 1000,
+            "end_ms": 3000,
+            "words": [
+                {"text": "Hello ", "start_ms": 1000},
+                {"text": "world", "start_ms": 2000},
+            ],
+        }])
+        lines = fetch_lyrics.parse_lyricsfile(doc)
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]["text"], "Hello world")
+        self.assertEqual(lines[0]["time"], 1000)
+        self.assertEqual(lines[0]["duration"], 2000)
+        self.assertEqual(lines[0]["chars"], [1000] * 6 + [2000] * 5)
+
+    def test_line_synced_only(self):
+        doc = self._doc(lines=[{
+            "text": "No words here",
+            "start_ms": 500,
+            "end_ms": 2500,
+        }])
+        lines = fetch_lyrics.parse_lyricsfile(doc)
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]["text"], "No words here")
+        self.assertEqual(lines[0]["time"], 500)
+        self.assertEqual(lines[0]["duration"], 2000)
+        self.assertEqual(lines[0]["chars"], [])
+
+    def test_overlapping_lines(self):
+        doc = self._doc(lines=[
+            {"text": "Line A", "start_ms": 0, "end_ms": 3000},
+            {"text": "Line B", "start_ms": 1500, "end_ms": 4000},
+        ])
+        lines = fetch_lyrics.parse_lyricsfile(doc)
+        self.assertEqual(len(lines), 2)
+        self.assertEqual(lines[0]["time"], 0)
+        self.assertEqual(lines[1]["time"], 1500)
+
+    def test_instrumental_returns_empty(self):
+        doc = self._doc(metadata={"title": "T", "artist": "A", "instrumental": True})
+        self.assertEqual(fetch_lyrics.parse_lyricsfile(doc), [])
+
+    def test_wrong_version_returns_empty(self):
+        doc = self._doc(version="2.0", lines=[{"text": "X", "start_ms": 0}])
+        self.assertEqual(fetch_lyrics.parse_lyricsfile(doc), [])
+
+    def test_malformed_yaml_returns_empty(self):
+        self.assertEqual(fetch_lyrics.parse_lyricsfile("{not valid yaml {{{"), [])
+
+    def test_empty_string_returns_empty(self):
+        self.assertEqual(fetch_lyrics.parse_lyricsfile(""), [])
+
+    def test_no_lines_key_returns_empty(self):
+        doc = 'version: "1.0"\nmetadata:\n  title: T\n  artist: A\n'
+        self.assertEqual(fetch_lyrics.parse_lyricsfile(doc), [])
+
+    def test_skips_empty_text(self):
+        doc = self._doc(lines=[
+            {"text": "", "start_ms": 0, "end_ms": 1000},
+            {"text": "Real", "start_ms": 1000, "end_ms": 2000},
+        ])
+        lines = fetch_lyrics.parse_lyricsfile(doc)
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]["text"], "Real")
+
+
+class LrclibEnhancedTest(unittest.TestCase):
+    @mock.patch("fetch_lyrics.request_json")
+    def test_uses_lyricsfile_when_enhanced(self, request_json):
+        import yaml
+        lf = yaml.dump({
+            "version": "1.0",
+            "metadata": {"title": "Song", "artist": "Artist"},
+            "lines": [{
+                "text": "Word-synced",
+                "start_ms": 1000,
+                "end_ms": 3000,
+                "words": [
+                    {"text": "Word-", "start_ms": 1000},
+                    {"text": "synced", "start_ms": 2000},
+                ],
+            }],
+        })
+        request_json.return_value = [{
+            "id": 1, "trackName": "Song", "artistName": "Artist",
+            "duration": 200, "syncedLyrics": "[00:01.00]Fallback",
+            "lyricsfile": lf,
+        }]
+        result = fetch_lyrics.fetch(
+            {"title": "Song", "artist": "Artist", "duration": 200},
+            {"providers": ["lrclib"], "enhanced": True},
+        )
+        self.assertEqual(result["type"], "lyrics")
+        self.assertEqual(result["lines"][0]["text"], "Word-synced")
+        self.assertEqual(result["lines"][0]["chars"], [1000] * 5 + [2000] * 6)
+
+    @mock.patch("fetch_lyrics.request_json")
+    def test_falls_back_to_lrc_when_lyricsfile_empty(self, request_json):
+        request_json.return_value = [{
+            "id": 1, "trackName": "Song", "artistName": "Artist",
+            "duration": 200, "syncedLyrics": "[00:01.00]LRC line",
+            "lyricsfile": "",
+        }]
+        result = fetch_lyrics.fetch(
+            {"title": "Song", "artist": "Artist", "duration": 200},
+            {"providers": ["lrclib"], "enhanced": True},
+        )
+        self.assertEqual(result["type"], "lyrics")
+        self.assertEqual(result["lines"][0]["text"], "LRC line")
+
+    @mock.patch("fetch_lyrics.request_json")
+    def test_skips_lyricsfile_when_not_enhanced(self, request_json):
+        import yaml
+        lf = yaml.dump({
+            "version": "1.0",
+            "metadata": {"title": "Song", "artist": "Artist"},
+            "lines": [{"text": "Word", "start_ms": 0, "end_ms": 1000}],
+        })
+        request_json.return_value = [{
+            "id": 1, "trackName": "Song", "artistName": "Artist",
+            "duration": 200, "syncedLyrics": "[00:01.00]LRC line",
+            "lyricsfile": lf,
+        }]
+        result = fetch_lyrics.fetch(
+            {"title": "Song", "artist": "Artist", "duration": 200},
+            {"providers": ["lrclib"], "enhanced": False},
+        )
+        self.assertEqual(result["type"], "lyrics")
+        self.assertEqual(result["lines"][0]["text"], "LRC line")
+
+
 if __name__ == "__main__":
     unittest.main()

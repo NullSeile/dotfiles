@@ -7,8 +7,6 @@ export type LyricLine = {
   time: number, -- ms from song start; -1 marks unsynced/plain-text lyrics
   duration: number, -- ms; 0 when unknown
   text: string,
-  translation: string?,
-  romanization: string?,
   chars: { number }?, -- per-character activation times in ms (enhanced lyrics)
 }
 
@@ -17,7 +15,6 @@ type ServiceConfig = {
   providers: { string },
   allow_plain_text: boolean,
   enhanced: boolean,
-  translation_language: string,
 }
 
 type PlayerRow = {
@@ -73,7 +70,6 @@ local config: ServiceConfig = {
   providers = {},
   allow_plain_text = true,
   enhanced = false,
-  translation_language = "",
 }
 
 local resultsCache: { [string]: { [string]: { LyricLine } } } = {}
@@ -254,8 +250,6 @@ local function loadConfig()
   config.providers = normalizeProviders(noctalia.getConfig("providers"))
   config.allow_plain_text = noctalia.getConfig("allow_plain_text") ~= false
   config.enhanced = noctalia.getConfig("enhanced") == true
-  local language = tostring(noctalia.getConfig("translation_language") or "")
-  config.translation_language = if language == "none" then "" else language
 end
 
 local function asCharTimes(value: any): { number }
@@ -279,8 +273,6 @@ local function asLyricLines(value: any): { LyricLine }?
           time = if type(record.time) == "number" then record.time else -1,
           duration = if type(record.duration) == "number" then record.duration else 0,
           text = text,
-          translation = if type(record.translation) == "string" then record.translation else "",
-          romanization = if type(record.romanization) == "string" then record.romanization else "",
           chars = asCharTimes(record.chars),
         }
       end
@@ -440,11 +432,11 @@ local function applyText(text: string?, sourceUsed: string?): boolean
     if mins ~= nil and secs ~= nil and body ~= "" then
       lines[#lines + 1] = {
         time = math.floor((tonumber(mins) or 0) * 60000 + (tonumber(secs) or 0) * 1000),
-        duration = 0, text = body, translation = "", romanization = "", chars = {},
+        duration = 0, text = body, chars = {},
       }
       seenLyric = true
     elseif body ~= "" and (seenLyric or body:find(":", 1, true) == nil) then
-      lines[#lines + 1] = { time = -1, duration = 0, text = body, translation = "", romanization = "", chars = {} }
+      lines[#lines + 1] = { time = -1, duration = 0, text = body, chars = {} }
       seenLyric = true
     end
   end
@@ -480,7 +472,6 @@ local function fetchLyrics(track: TrackRecord)
       providers = config.providers,
       allow_plain_text = config.allow_plain_text,
       enhanced = config.enhanced,
-      lang = config.translation_language,
       fetch_all = true,
     },
   })
@@ -668,7 +659,6 @@ local function fetchOptionsSignature(): string
     table.concat(config.providers, "\n"),
     tostring(config.allow_plain_text),
     tostring(config.enhanced),
-    config.translation_language,
   }, "\0")
 end
 

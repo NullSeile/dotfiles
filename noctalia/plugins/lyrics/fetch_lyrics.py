@@ -37,6 +37,13 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+try:
+    import yaml
+
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -323,6 +330,54 @@ def parse_text(text: str, allow_plain: bool):
     return []
 
 
+def parse_lyricsfile(raw: str) -> list:
+    """Parse a Lyricsfile YAML document into plugin lines.
+
+    Returns a list of line dicts, or an empty list on failure.
+    Word-level timing is converted to per-character activation times.
+    """
+    if not HAS_YAML or not raw:
+        return []
+    try:
+        doc = yaml.safe_load(raw)
+    except yaml.YAMLError:
+        return []
+    if not isinstance(doc, dict):
+        return []
+    if doc.get("version") != "1.0":
+        return []
+    meta = doc.get("metadata")
+    if not isinstance(meta, dict):
+        return []
+    if meta.get("instrumental") is True:
+        return []
+    raw_lines = doc.get("lines")
+    if not isinstance(raw_lines, list):
+        return []
+    lines = []
+    for item in raw_lines:
+        if not isinstance(item, dict):
+            continue
+        text = clean(item.get("text"))
+        start = as_int(item.get("start_ms"))
+        if not text or start < 0:
+            continue
+        end = as_int(item.get("end_ms"))
+        duration = max(0, end - start) if end >= start else 0
+        chars = []
+        words = item.get("words")
+        if isinstance(words, list) and words:
+            for w in words:
+                if not isinstance(w, dict):
+                    continue
+                wtext = str(w.get("text") or "")
+                wstart = as_int(w.get("start_ms"))
+                if wtext and wstart >= 0:
+                    chars.extend([wstart] * len(wtext))
+        lines.append(make_line(start, text, duration, chars=chars or None))
+    return lines
+
+
 def maybe_decode(text: str) -> str:
     text = text or ""
     if not text or TIME_TAG.search(text) or KRC_LINE.search(text):
@@ -508,6 +563,14 @@ def from_lrclib(track, options):
         f'duration={as_int(best.get("duration"))}s '
         f'synced={synced} candidates={len(matches)}'
     )
+    if options["enhanced"]:
+        lf = clean(best.get("lyricsfile"))
+        if lf:
+            lines = parse_lyricsfile(lf)
+            if lines:
+                log(f"lrclib: using lyricsfile ({len(lines)} lines)")
+                return accept("lrclib", lines, options)
+            log("lrclib: lyricsfile parse failed, falling back to LRC")
     text = best.get("syncedLyrics") or ""
     if not text and options["allow_plain_text"]:
         text = best.get("plainLyrics") or ""

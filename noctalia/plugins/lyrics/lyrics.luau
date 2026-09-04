@@ -7,8 +7,6 @@ export type LyricLine = {
   time: number, -- ms from song start; -1 marks unsynced/plain-text lyrics
   duration: number, -- ms; 0 when unknown
   text: string,
-  translation: string?,
-  romanization: string?,
   chars: { number }?, -- per-character activation times in ms (enhanced lyrics)
   cue: boolean?, -- set on synthetic intro/interlude cue lines
   duration_inferred: boolean?, -- set when the fetcher estimated duration
@@ -43,7 +41,6 @@ type RowOpts = {
   useGradient: boolean?,
   solid: boolean?, -- skip karaoke coloring entirely
   dim: boolean?, -- fixed inactive color
-  secondary: boolean?, -- secondary-row palette
   cascade: boolean?,
   wave: boolean?,
   typewriter: boolean?,
@@ -75,39 +72,27 @@ local function cfgBool(key: string, fallback: boolean): boolean
   return if type(value) == "boolean" then value else fallback
 end
 
-local maxLines = cfgNumber("max_lines", 1)
 local maxChars = cfgNumber("max_chars", 15)
 local charWidth = cfgNumber("char_width", 9)
 local gradientOn = cfgBool("gradient", true)
-local animation = cfgString("animation", "karaoke")
+local animation = cfgString("animation", "fade")
 local cueText = cfgString("cue_text", "•••••")
 if cueText == "" then cueText = "•••••" end
 local cueFontMode = cfgString("cue_font_mode", "follow")
 local cueFontFamily = cfgString("cue_font_family", "sans-serif")
 if cueFontFamily == "" then cueFontFamily = "sans-serif" end
-local doubleLine = cfgBool("double_line", true)
-local doubleLineAutoFit = cfgBool("double_line_auto_fit", true)
-local doubleLineHeightBudget = cfgNumber("double_line_height_budget", 26)
-local showTranslation = cfgBool("show_translation", true)
-local showRomanization = cfgBool("show_romanization", false)
-local secondaryLineMode = cfgString("secondary_line_mode", "translation_first")
 local karaokeEnabled = cfgBool("karaoke_enabled", true)
 local karaokeRequireTiming = cfgBool("karaoke_require_timing", true)
 local fontFamily = cfgString("font_family", "")
-local primaryFontSize = cfgNumber("primary_font_size", 0)
-local secondaryFontSize = cfgNumber("secondary_font_size", 10)
+local fontSize = cfgNumber("font_size", 0)
 local fontWeight = cfgString("font_weight", "normal")
 local fontStyle = cfgString("font_style", "normal")
-local lineGap = cfgNumber("line_gap", 2)
-local paddingLeft = cfgNumber("padding_left", 0)
-local paddingRight = cfgNumber("padding_right", 0)
 
 local hideWhenPaused = cfgBool("hide_when_paused", false)
 local hideWhenNoLyrics = cfgBool("hide_when_no_lyrics", false)
 local lyricsOffsetMs = cfgNumber("lyrics_offset_ms", 0)
 local activeColor = cfgString("active_color", "on_surface")
 local inactiveColor = cfgString("inactive_color", "on_surface_variant")
-local secondaryColor = cfgString("secondary_color", "on_surface_variant")
 
 -- ── Playback state mirrored from the service ────────────────────────────────
 
@@ -132,7 +117,6 @@ local BLEND_MS = 350
 local INTERLUDE_GAP_MS = 7000
 local INTRO_MIN_MS = 6000
 local INTERLUDE_MIN_MS = 5000
-local INTERLUDE_LEAD_MS = 1000
 
 local function shellQuote(value: string): string
   return "'" .. value:gsub("'", "'\\''") .. "'"
@@ -252,13 +236,13 @@ local function getLineInfo(): LineInfo?
 
   -- Only show an interlude between two real lyric lines. The final lyric stays
   -- visible through the outro instead of turning the whole song ending into dots.
-  local interludeStart = math.max(startTime, lineEnd - INTERLUDE_LEAD_MS)
-  if nextLine ~= nil and nextTime - lineEnd >= INTERLUDE_MIN_MS and position >= interludeStart then
+  -- if nextLine ~= nil and nextTime - lineEnd >= INTERLUDE_MIN_MS and position >= lineEnd then
+  if nextTime - lineEnd >= INTERLUDE_MIN_MS and position >= lineEnd then
     return {
       key = "interlude-" .. tostring(index),
       index = index,
       line = { time = 0, duration = 0, text = cueText, cue = true },
-      progress = clamp((position - interludeStart) / (nextTime - interludeStart), 0, 1),
+      progress = clamp((position - lineEnd) / (nextTime - lineEnd), 0, 1),
       synced = true,
       position = position,
       cue = true,
@@ -443,33 +427,6 @@ local function labelBaseline(): string
   return "text"
 end
 
-local function secondaryText(line: LyricLine?): string
-  if not doubleLine or line == nil then return "" end
-  local translation = if showTranslation then line.translation or "" else ""
-  local romanization = if showRomanization then line.romanization or "" else ""
-  if secondaryLineMode == "translation" then return translation end
-  if secondaryLineMode == "romanization" then return romanization end
-  if secondaryLineMode == "romanization_first" then
-    return if romanization ~= "" then romanization else translation
-  end
-  return if translation ~= "" then translation else romanization
-end
-
-local function secondaryRowEnabled(text: string?): boolean
-  return doubleLine and (showTranslation or showRomanization)
-    and text ~= nil and text:match("%S") ~= nil
-end
-
--- Returns (primary font scale, effective line gap) so two rows fit the budget.
-local function compactMetrics(hasSecondaryRow: boolean, vertical: boolean): (number, number)
-  if not hasSecondaryRow or vertical or not doubleLineAutoFit then return 1, lineGap end
-  local primaryBase = if primaryFontSize > 0 then primaryFontSize else 13
-  local secondaryBase = if secondaryFontSize > 0 then secondaryFontSize else 10
-  local naturalHeight = primaryBase * 1.25 + secondaryBase * 1.25 + lineGap
-  local scale = math.min(1, doubleLineHeightBudget / math.max(1, naturalHeight))
-  return scale, math.floor(lineGap * scale + 0.5)
-end
-
 local function buildLineRow(line: LyricLine | string, opts: RowOpts?): UiNode
   local options: RowOpts = if opts ~= nil then opts else {}
   local record: LyricLine?
@@ -504,9 +461,10 @@ local function buildLineRow(line: LyricLine | string, opts: RowOpts?): UiNode
 
   for sourceIndex = first, last do
     local active = if playing then activeColor else inactiveColor
-    local color = if options.secondary == true then secondaryColor
-      elseif options.dim == true then inactiveColor
+    local color = if options.dim == true
+      then inactiveColor
       else active
+
     if options.solid ~= true and options.dim ~= true then
       local progress = if #chars > 1 then (sourceIndex - 1) / (#chars - 1) else 0
       local charTime: number? = if times ~= nil then times[sourceIndex] else nil
@@ -548,11 +506,10 @@ local function buildLineRow(line: LyricLine | string, opts: RowOpts?): UiNode
       fontFamily = if isCue and cueFontMode == "custom" then cueFontFamily
         elseif fontFamily ~= "" then fontFamily
         else nil,
-      fontSize = if options.secondary == true then math.max(6, secondaryFontSize * fontScale)
-        elseif primaryFontSize > 0 or fontScale < 1
-          then math.max(6, (if primaryFontSize > 0 then primaryFontSize else 13) * fontScale)
+      fontSize = if fontSize > 0 or fontScale < 1
+          then math.max(6, (if fontSize > 0 then fontSize else 13) * fontScale)
         else nil,
-      fontWeight = if options.secondary == true then "normal" else fontWeight,
+      fontWeight = fontWeight,
       baseline = labelBaseline(),
     })
   end
@@ -599,8 +556,6 @@ local function asLyricLines(value: any): { LyricLine }?
           time = if type(record.time) == "number" then record.time else -1,
           duration = if type(record.duration) == "number" then record.duration else 0,
           text = text,
-          translation = if type(record.translation) == "string" then record.translation else "",
-          romanization = if type(record.romanization) == "string" then record.romanization else "",
           chars = if type(record.chars) == "table" then record.chars else {},
         }
       end
@@ -634,89 +589,34 @@ local function render()
   end
   barWidget.setVisible(true)
 
-  local vertical = barWidget.isVertical()
-  local useGradient = (animation == "karaoke" or animation == "cascade" or animation == "wave") and gradientOn
+  local useGradient = gradientOn
   local position = getProgressMs()
-  local lineNodes: { UiNode } = {}
-  local renderLineGap = lineGap
-  local renderTextHeight = 0
+  local line: UiNode = nil
 
   local info = getLineInfo()
   if info ~= nil then
     local shownLine, opacity = currentTransitionLine(info)
     if shownLine ~= nil then
-      local secondary = secondaryText(shownLine)
-      local showSecondaryRow = secondaryRowEnabled(secondary) and not shownLine.cue and not info.cue
-      local fontScale, effectiveLineGap = compactMetrics(showSecondaryRow, vertical)
       local timedKaraoke = hasWordTiming(shownLine)
       local karaokeActive = karaokeEnabled and shownLine == info.line and info.synced
         and (not karaokeRequireTiming or timedKaraoke)
-      lineNodes[#lineNodes + 1] = buildLineRow(shownLine, {
+      line = buildLineRow(shownLine, {
         key = "current-" .. tostring(info.index),
         follow = shownLine == info.line and info.synced,
         position = position,
         useGradient = karaokeActive and useGradient,
-        solid = not karaokeActive
-          or (animation ~= "karaoke" and animation ~= "cascade" and animation ~= "wave"),
+        solid = not karaokeActive,
         cascade = karaokeActive and animation == "cascade",
         wave = karaokeActive and animation == "wave",
         typewriter = shownLine == info.line and animation == "typewriter",
         blink = shownLine == info.line and animation == "blink",
         opacity = opacity,
         cue = shownLine == info.line and info.cue == true,
-        fontScale = fontScale,
       })
-      if showSecondaryRow then
-        lineNodes[#lineNodes + 1] = buildLineRow({ time = 0, duration = 0, text = secondary }, {
-          key = "secondary-" .. tostring(info.index),
-          follow = secondary ~= "" and info.synced,
-          position = position,
-          solid = true,
-          dim = true,
-          secondary = true,
-          opacity = if secondary ~= "" then math.min(0.82, opacity) else 0,
-          fontScale = fontScale,
-        })
-        renderLineGap = effectiveLineGap
-        if not vertical and doubleLineAutoFit then renderTextHeight = doubleLineHeightBudget end
-      end
-    end
-
-    if vertical and maxLines > 1 and shownLine == info.line then
-      local list = lyrics
-      for i = 1, maxLines - 1 do
-        local upcoming: LyricLine? = if list ~= nil then list[info.index + i] else nil
-        if upcoming == nil then break end
-        lineNodes[#lineNodes + 1] = buildLineRow(upcoming, {
-          key = "next-" .. tostring(info.index + i),
-          dim = true,
-          opacity = math.max(0.25, 0.58 - (i - 1) * 0.16),
-        })
-      end
     end
   end
 
-  if vertical then
-    barWidget.render(ui.column({ gap = 3, align = "start", opacity = if playing then 1 else 0.58 }, {
-      ui.column({
-        gap = renderLineGap,
-        align = "start",
-        justify = if renderTextHeight > 0 then "center" else nil,
-        height = if renderTextHeight > 0 then renderTextHeight else nil,
-      }, lineNodes),
-    }))
-  else
-    local children: { UiNode } = {}
-    if paddingLeft > 0 then children[#children + 1] = ui.spacer({ width = paddingLeft }) end
-    children[#children + 1] = ui.column({
-      gap = renderLineGap,
-      align = "start",
-      justify = if renderTextHeight > 0 then "center" else nil,
-      height = if renderTextHeight > 0 then renderTextHeight else nil,
-    }, lineNodes)
-    if paddingRight > 0 then children[#children + 1] = ui.spacer({ width = paddingRight }) end
-    barWidget.render(ui.row({ gap = 6, align = "center", opacity = if playing then 1 else 0.58 }, children))
-  end
+  barWidget.render(ui.row({ gap = 6, align = "center", opacity = if playing then 1 else 0.58 }, {line}))
 
   local tooltip = getTrackLabel()
   if sourceUsed ~= "" then

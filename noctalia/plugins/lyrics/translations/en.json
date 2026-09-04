@@ -32,8 +32,7 @@
       "options": {
         "blink": "Blink reveal",
         "cascade": "Character cascade",
-        "fade": "Fade only",
-        "karaoke": "Karaoke gradient + fade",
+        "fade": "Fade",
         "none": "No animation",
         "pulse": "Pulse fade",
         "typewriter": "Typewriter reveal",
@@ -59,18 +58,6 @@
     "cue_text": {
       "description": "Text or characters highlighted during intros and interludes.",
       "label": "Intro/interlude characters"
-    },
-    "double_line": {
-      "description": "Show translation or romanization below the current original lyric.",
-      "label": "Double-line lyrics"
-    },
-    "double_line_auto_fit": {
-      "description": "Reduce both font sizes and their gap on horizontal bars so capsule backgrounds do not clip the second line. Vertical bars are unchanged.",
-      "label": "Compact double lines"
-    },
-    "double_line_height_budget": {
-      "description": "Approximate total text height available on a horizontal bar. Lower values make both lines more compact.",
-      "label": "Double-line height budget"
     },
     "enhanced": {
       "description": "Request word-by-word timings when the provider has them (Musixmatch richsync, NetEase YRC).",
@@ -115,7 +102,7 @@
       "label": "Hide when paused"
     },
     "inactive_color": {
-      "description": "Color used for upcoming lyrics, paused playback, and secondary lines.",
+      "description": "Color used for upcoming lyrics and paused playback.",
       "label": "Inactive lyric color"
     },
     "karaoke_enabled": {
@@ -126,10 +113,6 @@
       "description": "Only run per-character karaoke when the source provides word or character timings. Line-only lyrics stay fully highlighted.",
       "label": "Require word timing"
     },
-    "line_gap": {
-      "description": "Spacing between original, translation, and context lines.",
-      "label": "Line gap"
-    },
     "lyrics_offset_ms": {
       "description": "Positive values show lyrics earlier; negative values show them later.",
       "label": "Lyrics offset (ms)"
@@ -137,18 +120,6 @@
     "max_chars": {
       "description": "Visible width of the widget in character cells. Long lines keep the current lyric centered.",
       "label": "Max characters"
-    },
-    "max_lines": {
-      "description": "Maximum lyric lines to show at once on vertical bars.",
-      "label": "Max lines"
-    },
-    "padding_left": {
-      "description": "Empty space before the widget content.",
-      "label": "Left padding"
-    },
-    "padding_right": {
-      "description": "Empty space after the widget content.",
-      "label": "Right padding"
     },
     "player_allowlist": {
       "description": "Only use matching MPRIS player names or instances. Supports * wildcards; leave empty to allow all players.",
@@ -162,51 +133,13 @@
       "description": "How often the service refreshes MPRIS metadata and playback position.",
       "label": "Player polling interval (ms)"
     },
-    "primary_font_size": {
-      "description": "Font size for the original lyric line. Zero follows Noctalia.",
-      "label": "Primary lyric font size"
+    "font_size": {
+      "description": "Font size for the lyric line. Zero follows Noctalia.",
+      "label": "Lyric font size"
     },
     "providers": {
       "description": "Providers tried in order: lrclib, netease, qqmusic, kugou, or musixmatch.",
       "label": "Lyrics providers"
-    },
-    "secondary_color": {
-      "description": "Color used for translation and romanization lines.",
-      "label": "Secondary lyric color"
-    },
-    "secondary_font_size": {
-      "description": "Font size for translations and romanization.",
-      "label": "Secondary font size"
-    },
-    "secondary_line_mode": {
-      "description": "Choose which additional lyric layer is preferred.",
-      "label": "Secondary line content",
-      "options": {
-        "romanization": "Romanization only",
-        "romanization_first": "Romanization, then translation",
-        "translation": "Translation only",
-        "translation_first": "Translation, then romanization"
-      }
-    },
-    "show_translation": {
-      "description": "Allow translated lyrics to appear on the secondary line.",
-      "label": "Show translation"
-    },
-    "show_romanization": {
-      "description": "Allow romanized or transliterated lyrics to appear on the secondary line.",
-      "label": "Show romanization"
-    },
-    "translation_language": {
-      "description": "Preferred translated-lyric language. Musixmatch, NetEase, and QQ Music may provide translations.",
-      "label": "Translation language",
-      "options": {
-        "en": "English",
-        "ja": "Japanese",
-        "ko": "Korean",
-        "none": "Off",
-        "zh-hans": "Simplified Chinese",
-        "zh-hant": "Traditional Chinese"
-      }
     }
   }
 }

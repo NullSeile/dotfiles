@@ -4,7 +4,7 @@ version = "2.2.0"
 plugin_api = 28
 author = "nullptr"
 license = "MIT"
-dependencies = ["playerctl", "python3"]
+dependencies = ["playerctl", "python3", "python3-yaml"]
 tags = ["bar", "panel", "service", "music", "media", "animation"]
 icon = "music"
 description = "Synchronized lyrics from LRCLIB, NetEase, QQ Music, Kugou, and Musixmatch, with karaoke highlighting and flexible layout."
@@ -58,32 +58,12 @@ type = "bool"
 label_key = "settings.enhanced.label"
 description_key = "settings.enhanced.description"
 default = false
-advanced = true
-
-[[setting]]
-key = "translation_language"
-type = "select"
-label_key = "settings.translation_language.label"
-description_key = "settings.translation_language.description"
-default = "none"
-options = [
-  { value = "none", label_key = "settings.translation_language.options.none" },
-  { value = "zh-Hans", label_key = "settings.translation_language.options.zh-hans" },
-  { value = "zh-Hant", label_key = "settings.translation_language.options.zh-hant" },
-  { value = "en", label_key = "settings.translation_language.options.en" },
-  { value = "ja", label_key = "settings.translation_language.options.ja" },
-  { value = "ko", label_key = "settings.translation_language.options.ko" },
-]
 
 # Headless background service: polls MPRIS metadata, fetches lyrics from
 # the configured providers, publishes playback state for widgets.
 [[service]]
 id = "service"
 entry = "lyrics_service.luau"
-
-[[shortcut]]
-id = "open_selector"
-entry = "lyrics_shortcut.luau"
 
 [[panel]]
 id = "selector"
@@ -136,69 +116,6 @@ entry = "lyrics.luau"
   description_key = "settings.inactive_color.description"
   default = "on_surface_variant"
 
-  [[widget.setting]]
-  key = "secondary_color"
-  type = "color"
-  label_key = "settings.secondary_color.label"
-  description_key = "settings.secondary_color.description"
-  default = "on_surface_variant"
-
-  # Line layers.
-  [[widget.setting]]
-  key = "double_line"
-  type = "bool"
-  label_key = "settings.double_line.label"
-  description_key = "settings.double_line.description"
-  default = true
-
-  [[widget.setting]]
-  key = "double_line_auto_fit"
-  type = "bool"
-  label_key = "settings.double_line_auto_fit.label"
-  description_key = "settings.double_line_auto_fit.description"
-  default = true
-  visible_when = { key = "double_line", values = ["true"] }
-
-  [[widget.setting]]
-  key = "double_line_height_budget"
-  type = "int"
-  label_key = "settings.double_line_height_budget.label"
-  description_key = "settings.double_line_height_budget.description"
-  default = 26
-  min = 18
-  max = 40
-  visible_when = { key = "double_line", values = ["true"] }
-
-  [[widget.setting]]
-  key = "show_translation"
-  type = "bool"
-  label_key = "settings.show_translation.label"
-  description_key = "settings.show_translation.description"
-  default = true
-  visible_when = { key = "double_line", values = ["true"] }
-
-  [[widget.setting]]
-  key = "show_romanization"
-  type = "bool"
-  label_key = "settings.show_romanization.label"
-  description_key = "settings.show_romanization.description"
-  default = false
-  visible_when = { key = "double_line", values = ["true"] }
-
-  [[widget.setting]]
-  key = "secondary_line_mode"
-  type = "select"
-  label_key = "settings.secondary_line_mode.label"
-  description_key = "settings.secondary_line_mode.description"
-  default = "translation_first"
-  options = [
-    { value = "translation_first", label_key = "settings.secondary_line_mode.options.translation_first" },
-    { value = "romanization_first", label_key = "settings.secondary_line_mode.options.romanization_first" },
-    { value = "translation", label_key = "settings.secondary_line_mode.options.translation" },
-    { value = "romanization", label_key = "settings.secondary_line_mode.options.romanization" },
-  ]
-  visible_when = { key = "double_line", values = ["true"] }
-
   # Karaoke and motion.
   [[widget.setting]]
   key = "karaoke_enabled"
@@ -227,10 +144,9 @@ entry = "lyrics.luau"
   key = "animation"
   type = "select"
   label_key = "settings.animation.label"
-  default = "karaoke"
+  default = "fade"
   description_key = "settings.animation.description"
   options = [
-    { value = "karaoke", label_key = "settings.animation.options.karaoke" },
     { value = "cascade", label_key = "settings.animation.options.cascade" },
     { value = "wave", label_key = "settings.animation.options.wave" },
     { value = "fade", label_key = "settings.animation.options.fade" },
@@ -239,15 +155,6 @@ entry = "lyrics.luau"
     { value = "blink", label_key = "settings.animation.options.blink" },
     { value = "none", label_key = "settings.animation.options.none" },
   ]
-
-  [[widget.setting]]
-  key = "max_lines"
-  type = "int"
-  label_key = "settings.max_lines.label"
-  default = 1
-  min = 1
-  max = 3
-  description_key = "settings.max_lines.description"
 
   # Width and spacing.
   [[widget.setting]]
@@ -268,33 +175,6 @@ entry = "lyrics.luau"
   max = 24
   description_key = "settings.char_width.description"
 
-  [[widget.setting]]
-  key = "line_gap"
-  type = "int"
-  label_key = "settings.line_gap.label"
-  description_key = "settings.line_gap.description"
-  default = 2
-  min = 0
-  max = 24
-
-  [[widget.setting]]
-  key = "padding_left"
-  type = "int"
-  label_key = "settings.padding_left.label"
-  description_key = "settings.padding_left.description"
-  default = 0
-  min = 0
-  max = 64
-
-  [[widget.setting]]
-  key = "padding_right"
-  type = "int"
-  label_key = "settings.padding_right.label"
-  description_key = "settings.padding_right.description"
-  default = 0
-  min = 0
-  max = 64
-
   # Typography.
   [[widget.setting]]
   key = "font_family"
@@ -304,23 +184,13 @@ entry = "lyrics.luau"
   default = ""
 
   [[widget.setting]]
-  key = "primary_font_size"
+  key = "font_size"
   type = "int"
-  label_key = "settings.primary_font_size.label"
-  description_key = "settings.primary_font_size.description"
+  label_key = "settings.font_size.label"
+  description_key = "settings.font_size.description"
   default = 0
   min = 0
   max = 48
-
-  [[widget.setting]]
-  key = "secondary_font_size"
-  type = "int"
-  label_key = "settings.secondary_font_size.label"
-  description_key = "settings.secondary_font_size.description"
-  default = 10
-  min = 6
-  max = 36
-  visible_when = { key = "double_line", values = ["true"] }
 
   [[widget.setting]]
   key = "font_weight"
