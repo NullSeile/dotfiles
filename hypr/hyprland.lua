@@ -1,8 +1,25 @@
 ------------------
 ---- MONITORS ----
 ------------------
+hl.monitor({
+    output = "eDP-1",
+    mode = "1920x1080@144.02Hz",
+})
 
--- hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "auto", scale = "auto" })
+hl.monitor({
+    output = "desc:GIGA-BYTE TECHNOLOGY CO. LTD. GIGABYTE G24F 21520B000999",
+    mode = "1920x1080@170.00Hz",
+    position = "-1920x0",
+})
+
+hl.monitor({
+    output = "desc:Hisense Electric Co. Ltd. HISENSE 0x00000001",
+    mode = "1920x1080@60.00Hz",
+    mirror = "desc:BOE 0x08F7",
+    position = "1920x0",
+})
+
+    -- hl.monitor({ output = "eDP-1", mode = "1920x1080@60", position = "auto", scale = "auto" })
 -- hl.monitor({ output = "eDP-1", mode = "1920x1080@144", position = "auto", scale = "auto" })
 -- hl.monitor({ output = "eDP-1", mode = "1920x1080@144", position = "auto", scale = "auto" })
 -- hl.monitor({
@@ -38,10 +55,8 @@ if USE_HY3 then
 end
 
 local ipc = "noctalia msg "
--- local ipc = "qs -c noctalia-shell ipc call"
 local terminal = "GTK_IM_MODULE=simple ghostty"
-local browser = "helium-browser"
-local fileManager = "nautilus"
+local browser = "zen-browser"
 local menu = ipc .. "panel-toggle launcher"
 
 -------------------
@@ -49,13 +64,21 @@ local menu = ipc .. "panel-toggle launcher"
 -------------------
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("otd-daemon")
-    hl.exec_cmd("syncthing --no-browser")
-    hl.exec_cmd("nm-applet")
+    hl.exec_cmd([[
+        tmux new-session -d -s autostart -n '_init'
+
+        tmux new-window -t autostart -n 'otd-daemon' 'otd-daemon'
+        tmux new-window -t autostart -n 'syncthing' 'syncthing --no-browser'
+        tmux new-window -t autostart -n 'nm-applet' 'nm-applet'
+        tmux new-window -t autostart -n 'noctalia' 'noctalia'
+        tmux new-window -t autostart -n 'noctalia-web-theme' '~/dev/noctalia-web-theme/start.sh'
+
+        tmux kill-window -t autostart:_init
+    ]])
     hl.exec_cmd("hyprpm reload -n")
     -- hl.exec_cmd("systemctl --user start himawari.service")
+    hl.exec_cmd("systemctl --user start vicinae.service")
     -- hl.exec_cmd("swaybg -i /home/lia/dotfiles/himawari-wallpaper/lastest.png -m fill")
-    hl.exec_cmd("noctalia")
 end)
 
 -------------------------------
@@ -104,28 +127,29 @@ end
 local focus = false
 
 local function update_borders()
-    local ws = hl.get_active_workspace()
-    if ws == nil then
-        return
-    end
-    local windows = hl.get_workspace_windows(ws)
-    local n_visible = 0
-    for _, win in ipairs(windows) do
-        if win.visible then
-            n_visible = n_visible + 1
+    hl.timer(function()
+        local ws = hl.get_active_workspace()
+        if ws == nil then
+            return
         end
-    end
+        local windows = hl.get_workspace_windows(ws)
+        local n_visible = 0
+        for _, win in ipairs(windows) do
+            if win.visible then
+                n_visible = n_visible + 1
+            end
+        end
 
-    hl.window_rule({
-        match = {
-            workspace = ws.name,
-            fullscreen_state_client = 0,
-            float = false,
-        },
-        border_size = n_visible == 1 and 0 or 2,
-        rounding = focus and 0 or (n_visible == 1 and 7 or 5),
-    })
-    -- hl.dispatch(hy3.debug_nodes())
+        hl.window_rule({
+            match = {
+                workspace = ws.name,
+                fullscreen_state_client = 0,
+                float = false,
+            },
+            border_size = n_visible == 1 and 0 or 2,
+            rounding = focus and 0 or (n_visible == 1 and 7 or 5),
+        })
+    end, { timeout = 5, type = "oneshot" })
 end
 
 local function apply_config()
@@ -147,14 +171,14 @@ local function apply_config()
                         height = 8,
 
                         colors = {
-                            active = colors.secondary,
-                            active_border = colors.secondary,
+                            active = colors.primary,
+                            active_border = colors.primary,
 
-                            active_alt_monitor = colors.primary,
-                            active_alt_monitor_border = colors.primary,
+                            active_alt_monitor = colors.secondary,
+                            active_alt_monitor_border = colors.secondary,
 
-                            focused = colors.primary,
-                            focused_border = colors.primary,
+                            focused = colors.secondary,
+                            focused_border = colors.secondary,
 
                             inactive = colors.surface,
                             inactive_border = colors.surface_variant,
@@ -236,7 +260,7 @@ local function apply_config()
     --     border_size = 0,
     --     rounding = focus and 0 or 7,
     -- })
-    --
+
     hl.window_rule({
         match = {
             fullscreen_state_client = 1,
@@ -274,8 +298,8 @@ hl.bind(mainMod .. " + SHIFT + 2", function()
     hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
     update_borders()
 end)
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
-hl.bind(mainMod .. " + CONTROL + SPACE", hl.dsp.exec_cmd(menu))
+-- hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
+-- hl.bind(mainMod .. " + CONTROL + SPACE", hl.dsp.exec_cmd(menu))
 
 -- Fullscreen dispatcher does not have a native dsp yet, fallback to exec_cmd with hyprctl
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ action = "toggle" }))
@@ -288,8 +312,7 @@ if USE_HY3 then
         update_borders()
     end)
 else
-    hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
-    hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
+    -- hl.bind(mainMod .. " + W", hl.dsp.group.toggle())
 end
 
 hl.bind(mainMod .. " + CONTROL + F", function()
@@ -350,10 +373,18 @@ end
 
 -- Workspace bindings
 local k = { m = 1, comma = 2, period = 3, j = 4, k = 5, l = 6, u = 7, i = 8, o = 9 }
-for key, num in pairs(k) do
-    hl.bind(wmMod .. " + " .. key, hl.dsp.focus({ workspace = num }))
-    -- hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
-    hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
+if USE_HY3 then
+    for key, num in pairs(k) do
+        hl.bind(wmMod .. " + " .. key, hl.dsp.focus({ workspace = num }))
+        -- hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
+        hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
+    end
+else
+    for key, num in pairs(k) do
+        hl.bind(wmMod .. " + " .. key, hl.dsp.focus({ workspace = num }))
+        -- hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
+        hl.bind(wmMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = num }))
+    end
 end
 
 hl.bind(wmMod .. " + backspace", hl.dsp.workspace.toggle_special(""))
@@ -372,11 +403,7 @@ hl.on("window.fullscreen", updateDragBind)
 
 -- hl.on("workspace.active", update_borders)
 -- hl.on("window.move_to_workspace", update_borders)
-hl.on("window.open", function()
-    hl.timer(function()
-        update_borders()
-    end, { timeout = 1, type = "oneshot" })
-end)
+hl.on("window.open", update_borders)
 hl.on("window.destroy", update_borders)
 hl.on("window.active", update_borders)
 
